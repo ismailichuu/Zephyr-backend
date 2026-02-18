@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { PasswordService } from '../ports/password.service.port';
 import type { OtpService } from '../ports/otp.service.port';
 import type { EmailService } from '../ports/email.service.port';
@@ -9,13 +9,26 @@ import { User } from 'src/user/domain/entities/user.entity';
 import { UserRole } from 'src/user/domain/enums/role.enum';
 import { UserStatus } from 'src/user/domain/enums/userStatus.enum';
 import { ALREADY_REGISTERED } from '../constants/error-message.const';
+import {
+  AUTH_USER_REPOSITORY,
+  EMAIL_SERVICE,
+  ID_GENERATOR,
+  OTP_SERVICE,
+  PASSWORD_SERVICE,
+} from '../ports/auth.token';
 
+@Injectable()
 export class SignupUseCase {
   constructor(
+    @Inject(AUTH_USER_REPOSITORY)
     private readonly _authRepo: AuthUserRepository,
+    @Inject(PASSWORD_SERVICE)
     private readonly _passwordService: PasswordService,
+    @Inject(OTP_SERVICE)
     private readonly _otpService: OtpService,
+    @Inject(EMAIL_SERVICE)
     private readonly _emailService: EmailService,
+    @Inject(ID_GENERATOR)
     private readonly _idGenerator: IdGenerator,
   ) {}
 

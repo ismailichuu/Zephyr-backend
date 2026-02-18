@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { AuthUserRepository } from '../ports/auth-user-repository.port';
 import type { PasswordService } from '../ports/password.service.port';
 import type { TokenService } from '../ports/token.service.port';
@@ -7,11 +7,20 @@ import {
   NOT_REGISTERED,
   NOT_VERIFIED,
 } from '../constants/error-message.const';
+import {
+  AUTH_USER_REPOSITORY,
+  PASSWORD_SERVICE,
+  TOKEN_SERVICE,
+} from '../ports/auth.token';
 
+@Injectable()
 export class LoginUseCase {
   constructor(
+    @Inject(AUTH_USER_REPOSITORY)
     private _authRepo: AuthUserRepository,
+    @Inject(PASSWORD_SERVICE)
     private _passwordService: PasswordService,
+    @Inject(TOKEN_SERVICE)
     private _tokenService: TokenService,
   ) {}
 

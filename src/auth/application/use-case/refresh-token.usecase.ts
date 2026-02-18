@@ -1,8 +1,13 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { TokenService } from '../ports/token.service.port';
+import { TOKEN_SERVICE } from '../ports/auth.token';
 
-export class refreshTokenUseCase {
-  constructor(private readonly _tokenService: TokenService) {}
+@Injectable()
+export class RefreshTokenUseCase {
+  constructor(
+    @Inject(TOKEN_SERVICE)
+    private readonly _tokenService: TokenService,
+  ) {}
 
   async execute(oldToken: string) {
     const payload = await this._tokenService.verifyRefreshToken(oldToken);

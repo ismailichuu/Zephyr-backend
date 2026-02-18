@@ -18,7 +18,6 @@ import { LoginUseCase } from '../application/use-case/login.usecase';
 import { SignupUseCase } from '../application/use-case/signup.usecase';
 import { Role, SignUpDto } from './dto/signup.dto';
 import type { Request, Response } from 'express';
-import { refreshTokenUseCase } from '../application/use-case/refreshToken.usecase';
 import {
   ChangePasswordDto,
   ForgotPasswordDto,
@@ -34,13 +33,14 @@ import { UserRole } from 'src/user/domain/enums/role.enum';
 import type { GoogleAuthPort } from '../application/ports/google-auth.port';
 import { GOOGLE_AUTH_GATEWAY } from '../application/ports/auth.token';
 import { TOKEN_EXPIRED } from '../application/constants/error-message.const';
+import { RefreshTokenUseCase } from '../application/use-case/refresh-token.usecase';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly _loginUseCase: LoginUseCase,
     private readonly _signUpUseCase: SignupUseCase,
-    private readonly _refreshUseCase: refreshTokenUseCase,
+    private readonly _refreshUseCase: RefreshTokenUseCase,
     private readonly _otpVerfiyUsecase: OtpVerifyUsecase,
     private readonly _googleLoginUsecase: GoogleLoginUseCase,
     private readonly _forgotPasswordUsecase: ForgotPasswordUsecase,
@@ -215,7 +215,6 @@ export class AuthController {
     @Res() res: Response,
   ) {
     const url = this._googleAuthService.generateAuthUrl(role);
-    console.log('form /google', role)
     return res.redirect(url);
   }
 

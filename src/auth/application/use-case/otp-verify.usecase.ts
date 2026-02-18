@@ -1,12 +1,21 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { OtpService } from '../ports/otp.service.port';
 import type { AuthUserRepository } from '../ports/auth-user-repository.port';
 import type { TokenService } from '../ports/token.service.port';
+import {
+  AUTH_USER_REPOSITORY,
+  OTP_SERVICE,
+  TOKEN_SERVICE,
+} from '../ports/auth.token';
 
+@Injectable()
 export class OtpVerifyUsecase {
   constructor(
+    @Inject(OTP_SERVICE)
     private readonly _otpService: OtpService,
+    @Inject(AUTH_USER_REPOSITORY)
     private readonly _authRepo: AuthUserRepository,
+    @Inject(TOKEN_SERVICE)
     private readonly _tokeService: TokenService,
   ) {}
 

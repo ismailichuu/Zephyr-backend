@@ -1,12 +1,21 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { OtpService } from '../ports/otp.service.port';
 import type { EmailService } from '../ports/email.service.port';
 import type { AuthUserRepository } from '../ports/auth-user-repository.port';
+import {
+  AUTH_USER_REPOSITORY,
+  EMAIL_SERVICE,
+  OTP_SERVICE,
+} from '../ports/auth.token';
 
+@Injectable()
 export class ForgotPasswordUsecase {
   constructor(
+    @Inject(OTP_SERVICE)
     private readonly _otpService: OtpService,
+    @Inject(AUTH_USER_REPOSITORY)
     private readonly _authRepo: AuthUserRepository,
+    @Inject(EMAIL_SERVICE)
     private readonly _emailService: EmailService,
   ) {}
 

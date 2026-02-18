@@ -1,9 +1,14 @@
-import { EmailService } from '../ports/email.service.port';
-import { OtpService } from '../ports/otp.service.port';
+import { Inject, Injectable } from '@nestjs/common';
+import type { EmailService } from '../ports/email.service.port';
+import type { OtpService } from '../ports/otp.service.port';
+import { EMAIL_SERVICE, OTP_SERVICE } from '../ports/auth.token';
 
+@Injectable()
 export class ResendOtpUsecase {
   constructor(
+    @Inject(OTP_SERVICE)
     private readonly _otpService: OtpService,
+    @Inject(EMAIL_SERVICE)
     private readonly _emailService: EmailService,
   ) {}
 

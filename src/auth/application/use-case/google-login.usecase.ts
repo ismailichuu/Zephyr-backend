@@ -1,17 +1,29 @@
 import { UserRole } from 'src/user/domain/enums/role.enum';
 import { User } from 'src/user/domain/entities/user.entity';
-import { AuthUserRepository } from '../ports/auth-user-repository.port';
-import { GoogleAuthPort } from '../ports/google-auth.port';
-import { IdGenerator } from '../ports/id-generator.port';
-import { TokenService } from '../ports/token.service.port';
+import type { AuthUserRepository } from '../ports/auth-user-repository.port';
+import type { GoogleAuthPort } from '../ports/google-auth.port';
+import type { IdGenerator } from '../ports/id-generator.port';
+import type { TokenService } from '../ports/token.service.port';
 import { UserStatus } from 'src/user/domain/enums/userStatus.enum';
 import { Response } from 'express';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  AUTH_USER_REPOSITORY,
+  GOOGLE_AUTH_GATEWAY,
+  ID_GENERATOR,
+  TOKEN_SERVICE,
+} from '../ports/auth.token';
 
+@Injectable()
 export class GoogleLoginUseCase {
   constructor(
+    @Inject(GOOGLE_AUTH_GATEWAY)
     private readonly _googleAuthService: GoogleAuthPort,
+    @Inject(AUTH_USER_REPOSITORY)
     private readonly _userRepo: AuthUserRepository,
+    @Inject(ID_GENERATOR)
     private readonly _idGenerator: IdGenerator,
+    @Inject(TOKEN_SERVICE)
     private readonly _tokenService: TokenService,
   ) {}
 
