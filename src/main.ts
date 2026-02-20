@@ -21,5 +21,8 @@ async function bootstrap() {
 
   //cookie-parser
   app.use(cookieParser());
+
+  //listen
+  await app.listen(3000);
 }
 void bootstrap();
