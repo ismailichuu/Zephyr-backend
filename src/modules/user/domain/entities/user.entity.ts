@@ -4,15 +4,16 @@ import { UserStatus } from '../enums/userStatus.enum';
 export class User {
   constructor(
     private _userId: string,
-    public _name: string,
+    private _name: string,
     private _email: string,
     private _password: string,
     private _role: UserRole,
     private _provider: string = 'normal',
     private _isVerified: boolean = false,
-    public _isPremium: boolean,
-    public _subscriptionId: string | null,
-    public _status: UserStatus = UserStatus.ACTIVE,
+    private _isPremium: boolean,
+    private _subscriptionId: string | null,
+    private _status: UserStatus = UserStatus.ACTIVE,
+    private _joinedAt: Date | null,
   ) {}
 
   get userId(): string {
@@ -51,6 +52,10 @@ export class User {
     return this._subscriptionId;
   }
 
+  get joinedAt(): Date | null {
+    return this._joinedAt;
+  }
+
   get status(): UserStatus {
     return this._status;
   }
@@ -78,6 +83,7 @@ export class User {
     isPremium: boolean;
     subscriptionId: string | null;
     status: UserStatus;
+    joinedAt: Date | null;
   }): User {
     return new User(
       params.userId,
@@ -90,6 +96,7 @@ export class User {
       params.isPremium || false,
       params.subscriptionId || null,
       params.status || UserStatus.ACTIVE,
+      params.joinedAt || null,
     );
   }
 }

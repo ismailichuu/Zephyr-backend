@@ -52,6 +52,7 @@ export class GoogleLoginUseCase {
         subscriptionId: null,
         status: UserStatus.ACTIVE,
         provider: 'GOOGLE',
+        joinedAt: null,
       });
 
       await this._userRepo.create(user);

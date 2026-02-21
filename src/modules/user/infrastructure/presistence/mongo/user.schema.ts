@@ -35,6 +35,9 @@ export class UserDocument extends Document {
 
   @Prop({ enum: UserStatus, default: UserStatus.ACTIVE })
   status: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);

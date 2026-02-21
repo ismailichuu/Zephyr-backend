@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { FreelancerModule } from './modules/freelancer/freelancer.module';
 import { ClientModule } from './modules/client/client.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ClientModule } from './modules/client/client.module';
         }),
       ],
     }),
+    AdminModule,
   ],
 })
 export class AppModule {}

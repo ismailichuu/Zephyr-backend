@@ -11,7 +11,6 @@ export class UserRepositoryMongo implements UserRepository {
     @InjectModel(UserDocument?.name)
     private readonly _userModel: Model<UserDocument>,
   ) {}
-
   private toDomain(userDoc: UserDocument): User {
     return User.create({
       userId: userDoc.userId,
@@ -24,6 +23,7 @@ export class UserRepositoryMongo implements UserRepository {
       isPremium: userDoc.isPremium,
       subscriptionId: userDoc.subscriptionId,
       status: userDoc.status as UserStatus,
+      joinedAt: userDoc.createdAt || null,
     });
   }
 
@@ -37,6 +37,10 @@ export class UserRepositoryMongo implements UserRepository {
       isVerified: user.isVerified,
       provider: user.provider,
     };
+  }
+
+  countDocument(): Promise<number> {
+    return this._userModel.countDocuments({ role: { $ne: UserRole.ADMIN } });
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -68,7 +72,37 @@ export class UserRepositoryMongo implements UserRepository {
     return updatedUser ? this.toDomain(updatedUser) : null;
   }
 
-  async delete(id: string): Promise<void> {
-    await this._userModel.findByIdAndDelete(id).exec();
+  async findPaginated(
+    page: number,
+    limit: number,
+    search: string,
+  ): Promise<{
+    data: User[];
+    total: number;
+    totalPages: number;
+  }> {
+    const skip = (page - 1) * limit;
+
+    const filter: Record<string, any> = {
+      role: { $ne: UserRole.ADMIN },
+    };
+
+    if (search?.trim()) {
+      filter.$or = [
+        { name: { $regex: search.trim(), $options: 'i' } },
+        { email: { $regex: search.trim(), $options: 'i' } },
+      ];
+    }
+
+    const [docs, total] = await Promise.all([
+      this._userModel.find(filter).skip(skip).limit(limit).exec(),
+      this._userModel.countDocuments(filter),
+    ]);
+
+    return {
+      data: docs.map((doc) => this.toDomain(doc)),
+      total,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 }
