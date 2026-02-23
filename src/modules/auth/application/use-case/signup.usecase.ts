@@ -49,6 +49,7 @@ export class SignupUseCase {
       subscriptionId: null,
       status: UserStatus.ACTIVE,
       provider: 'NORMAL',
+      joinedAt: null,
     });
     let user: User | null;
     if (isAlready && !isAlready?.isVerified) {

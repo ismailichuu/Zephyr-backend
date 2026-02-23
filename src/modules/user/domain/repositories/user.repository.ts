@@ -7,5 +7,14 @@ export abstract class UserRepository implements BaseRepository<User> {
   abstract findById(id: string): Promise<User | null>;
   abstract findAll(): Promise<User[]>;
   abstract update(id: string, entity: Partial<User>): Promise<User | null>;
-  abstract delete(id: string): Promise<void>;
+  abstract findPaginated(
+    page: number,
+    limit: number,
+    search: string,
+  ): Promise<{
+    data: User[];
+    total: number;
+    totalPages: number;
+  }>;
+  abstract countDocument(): Promise<number>;
 }
