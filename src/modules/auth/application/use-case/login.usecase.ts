@@ -12,6 +12,8 @@ import {
   PASSWORD_SERVICE,
   TOKEN_SERVICE,
 } from '../ports/auth.token';
+import { Response } from 'express';
+import { LOGIN_SUCCESS } from '../constants/success-message.const';
 
 @Injectable()
 export class LoginUseCase {
@@ -24,7 +26,7 @@ export class LoginUseCase {
     private _tokenService: TokenService,
   ) {}
 
-  async execute(email: string, pass: string) {
+  async execute(email: string, pass: string, res: Response) {
     const user = await this._authRepo.findByEmail(email);
 
     if (user === null) throw new UnauthorizedException(NOT_REGISTERED);
@@ -36,9 +38,25 @@ export class LoginUseCase {
     const payload = { userId: user.userId, role: user.role };
     const accessToken = await this._tokenService.signAccessToken(payload);
     const refreshToken = await this._tokenService.signRefreshToken(payload);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/auth/refresh',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 15 * 60 * 1000,
+    });
+
     return {
-      accessToken,
-      refreshToken,
+      message: LOGIN_SUCCESS,
       user: {
         role: user.role,
       },

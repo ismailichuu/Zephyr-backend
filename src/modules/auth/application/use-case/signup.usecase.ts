@@ -16,6 +16,7 @@ import { User } from 'src/modules/user/domain/entities/user.entity';
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
 import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
 import { Role } from '../../presentation/dto/signup.dto';
+import { USER_ } from '../constants/success-message.const';
 
 @Injectable()
 export class SignupUseCase {
@@ -64,6 +65,12 @@ export class SignupUseCase {
       'signup',
     );
     await this._emailService.sendEmailSignup(user.email, otp);
-    return sessionId;
+
+    return {
+      message: USER_,
+      readyToVeify: true,
+      emailSent: true,
+      otpSessionId: sessionId,
+    };
   }
 }

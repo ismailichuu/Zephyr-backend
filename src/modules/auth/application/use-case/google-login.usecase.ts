@@ -73,12 +73,22 @@ export class GoogleLoginUseCase {
 
     const refreshToken = await this._tokenService.signRefreshToken(payload);
 
-    return {
-      accessToken,
-      refreshToken,
-      user: {
-        role: user.role,
-      },
-    };
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/auth/refresh',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 15 * 60 * 1000,
+    });
+
+    return res.redirect(`${process.env.CLIENT_URL + user?.role.toLowerCase()}`);
   }
 }

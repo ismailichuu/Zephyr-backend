@@ -7,6 +7,7 @@ import {
   EMAIL_SERVICE,
   OTP_SERVICE,
 } from '../ports/auth.token';
+import { FORGOT_PASSWORD_SUCCESS } from '../constants/success-message.const';
 
 @Injectable()
 export class ForgotPasswordUsecase {
@@ -30,7 +31,8 @@ export class ForgotPasswordUsecase {
     );
     await this._emailService.sendEmailForgot(user.email, otp);
     return {
-      sessionId,
+      message: FORGOT_PASSWORD_SUCCESS,
+      otpSessionId: sessionId,
     };
   }
 }

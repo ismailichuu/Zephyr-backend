@@ -11,7 +11,6 @@ import {
   Query,
   Req,
   Res,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { LoginUseCase } from '../application/use-case/login.usecase';
@@ -31,9 +30,9 @@ import { ResendOtpUsecase } from '../application/use-case/resend-otp.usecase';
 import { GoogleLoginUseCase } from '../application/use-case/google-login.usecase';
 import type { GoogleAuthPort } from '../application/ports/google-auth.port';
 import { GOOGLE_AUTH_GATEWAY } from '../application/ports/auth.token';
-import { TOKEN_EXPIRED } from '../application/constants/error-message.const';
 import { RefreshTokenUseCase } from '../application/use-case/refresh-token.usecase';
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
+import { LogoutUseCase } from '../application/use-case/logout.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -46,169 +45,66 @@ export class AuthController {
     private readonly _forgotPasswordUsecase: ForgotPasswordUsecase,
     private readonly _changePasswordUsecase: ChangePasswordUsecase,
     private readonly _resendOtpUsecase: ResendOtpUsecase,
+    private readonly _logoutUseCase: LogoutUseCase,
     @Inject(GOOGLE_AUTH_GATEWAY)
     private readonly _googleAuthService: GoogleAuthPort,
   ) {}
 
+  //login with email and password
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(
-    @Body() dto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const { user, accessToken, refreshToken } =
-      await this._loginUseCase.execute(dto.email, dto.password);
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/auth/refresh',
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
-
-    return {
-      message: 'Login Successful',
-      user,
-    };
+  login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {
+    return this._loginUseCase.execute(dto.email, dto.password, res);
   }
 
+  //signup with email and password
   @Post('signup')
-  async signup(@Body() dto: SignUpDto) {
-    const sessionId = await this._signUpUseCase.execute(
+  signup(@Body() dto: SignUpDto) {
+    return this._signUpUseCase.execute(
       dto.name,
       dto.email,
       dto.password,
       dto.role,
     );
-
-    return {
-      message: 'User creation successfull',
-      readyToVeify: true,
-      emailSent: true,
-      otpSessionId: sessionId,
-    };
   }
 
+  //logout user
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('refreshToken', {
-      path: '/auth/refresh',
-    });
-
-    res.clearCookie('accessToken', {
-      path: '/',
-    });
-
-    return {
-      message: 'Logged out Successfully',
-    };
+    return this._logoutUseCase.execute(res);
   }
 
+  //refresh access token
   @Post('refresh')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async refresh(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const oldRefreshToken = req?.cookies?.refreshToken as string | undefined;
-
-    if (!oldRefreshToken)
-      throw new UnauthorizedException('token expired or missing');
-
-    const { accessToken, refreshToken } =
-      await this._refreshUseCase.execute(oldRefreshToken);
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/auth/refresh',
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
-    return {
-      message: 'token refreshed',
-    };
+  refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this._refreshUseCase.execute(req, res);
   }
 
+  //verify otp for signup and forgot password
   @Post('verify-otp')
   @HttpCode(HttpStatus.OK)
-  async verifyOtp(
+  verifyOtp(
     @Body() dto: VerifyOtpDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const result = await this._otpVerfiyUsecase.execute(
+    return this._otpVerfiyUsecase.execute(
       dto.otp,
       dto.otpSessionId,
       dto.type,
+      res,
     );
-
-    if (result.type === 'FORGOT_SUCCESS') {
-      res.cookie('resetToken', result.resetToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-        path: '/auth/change-password',
-        maxAge: 10 * 60 * 10000,
-      });
-      return {
-        message: 'otp verified successfully',
-        readyToChange: true,
-      };
-    }
-
-    const { user, refreshToken, accessToken } = result;
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/auth/refresh',
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
-
-    return {
-      message: 'verification successful',
-      user,
-    };
   }
 
+  //resend otp for signup and forgot password
   @Post('resend-otp')
   @HttpCode(HttpStatus.OK)
   async resendOtp(@Body() dto: ResendOtpDto) {
-    const result = await this._resendOtpUsecase.execute(dto.sessionId);
-
-    return {
-      message: 'Otp Resend Successful',
-      ...result,
-    };
+    return this._resendOtpUsecase.execute(dto.sessionId);
   }
 
+  //google login
   @Get('google')
   googleRedirect(
     @Query('role', new ParseEnumPipe(Role)) role: Role,
@@ -218,69 +114,32 @@ export class AuthController {
     return res.redirect(url);
   }
 
+  //google auth callback
   @Get('google/callback')
   @HttpCode(HttpStatus.OK)
-  async googleAuth(
+  googleAuth(
     @Query('code') code: string,
     @Query('state', new ParseEnumPipe(Role)) role: UserRole,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const result = await this._googleLoginUsecase.execute(code, role, res);
-
-    if (!result) return result;
-
-    res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/auth/refresh',
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie('accessToken', result.accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
-
-    return res.redirect(
-      `${process.env.CLIENT_URL + result.user?.role.toLowerCase()}`,
-    );
+    return this._googleLoginUsecase.execute(code, role, res);
   }
 
+  //forgot password
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
-  async forgotPassword(@Body() dto: ForgotPasswordDto) {
-    const { sessionId } = await this._forgotPasswordUsecase.execute(dto.email);
-
-    return {
-      otpSessionId: sessionId,
-    };
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this._forgotPasswordUsecase.execute(dto.email);
   }
 
+  //password change after forgot password otp verification
   @Patch('change-password')
   @HttpCode(HttpStatus.OK)
-  async changePassword(
+  changePassword(
     @Body() dto: ChangePasswordDto,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const token = req.cookies.resetToken as string | undefined;
-    if (!token) throw new UnauthorizedException(TOKEN_EXPIRED);
-    const result = await this._changePasswordUsecase.execute(
-      dto.password,
-      token,
-    );
-
-    res.clearCookie('resetToken', {
-      path: '/auth/change-password',
-    });
-
-    return {
-      message: 'password change successful',
-      ...result,
-    };
+    return this._changePasswordUsecase.execute(req, res, dto.password);
   }
 }
