@@ -55,6 +55,7 @@ export class UserRepositoryMongo implements UserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
+    console.log('Finding user by ID:', id);
     const userDoc = await this._userModel.findOne({ userId: id }).exec();
     return userDoc ? this.toDomain(userDoc) : null;
   }

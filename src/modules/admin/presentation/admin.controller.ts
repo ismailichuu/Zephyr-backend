@@ -1,10 +1,27 @@
-import { Controller, Get, HttpCode, HttpStatus, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { GetAllUsersUsecase } from '../application/use-case/get-all-users.usecase';
 import { GetAllUsersDto } from './dtos/get-all-users.dto';
+import { AdminActionDto } from './dtos/admin-action.dto';
+import { AdminActionUsecase } from '../application/use-case/admin-action.usecase';
+import { GetUserDetailsUsecase } from '../application/use-case/get-user-details.usecase';
 
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly _getAllUserUsecase: GetAllUsersUsecase) {}
+  constructor(
+    private readonly _getAllUserUsecase: GetAllUsersUsecase,
+    private readonly _adminActionUsecase: AdminActionUsecase,
+    private readonly _getUserDetailsUsecase: GetUserDetailsUsecase,
+  ) {}
+
   @Get('user')
   @HttpCode(HttpStatus.OK)
   getAllUsers(@Query() query: GetAllUsersDto) {
@@ -13,5 +30,17 @@ export class AdminController {
     const search = query.search || '';
 
     return this._getAllUserUsecase.execute(page, limit, search);
+  }
+
+  @Patch('/user')
+  @HttpCode(HttpStatus.OK)
+  adminAction(@Body() dto: AdminActionDto) {
+    return this._adminActionUsecase.execute(dto.userId, dto.action);
+  }
+
+  @Get('/user/:id')
+  @HttpCode(HttpStatus.OK)
+  getUserById(@Param('id') id: string) {
+    return this._getUserDetailsUsecase.execute(id);
   }
 }
