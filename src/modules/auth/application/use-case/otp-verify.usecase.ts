@@ -12,6 +12,7 @@ import {
   OTP_VERIFICATION_FORGOT_SUCCESS,
   OTP_VERIFICATION_SUCCESS,
 } from '../constants/success-message.const';
+import { NOT_FOUND } from '../constants/error-message.const';
 
 @Injectable()
 export class OtpVerifyUsecase {
@@ -28,13 +29,13 @@ export class OtpVerifyUsecase {
     const email = await this._otpService.verify(sessionId, otp, 'signup');
 
     let user = await this._authRepo.findByEmail(email);
-    if (!user) throw new UnauthorizedException('user not found');
+    if (!user) throw new UnauthorizedException(NOT_FOUND);
 
     const payload = { userId: user.userId, role: user.role };
 
     if (type === 'signup') {
       user = await this._authRepo.update(user.userId, { isVerified: true });
-      if (!user) throw new UnauthorizedException('User Not found');
+      if (!user) throw new UnauthorizedException(NOT_FOUND);
       const refreshToken = await this._tokeService.signRefreshToken(payload);
       const accessToken = await this._tokeService.signAccessToken(payload);
 

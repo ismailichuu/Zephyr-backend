@@ -3,6 +3,7 @@ import type { TokenService } from '../ports/token.service.port';
 import { TOKEN_SERVICE } from '../ports/auth.token';
 import { Request, Response } from 'express';
 import { REFRESH_SUCCESS } from '../constants/success-message.const';
+import { TOKEN_EXPIRED } from '../constants/error-message.const';
 
 @Injectable()
 export class RefreshTokenUseCase {
@@ -14,13 +15,12 @@ export class RefreshTokenUseCase {
   async execute(req: Request, res: Response) {
     const oldRefreshToken = req?.cookies?.refreshToken as string | undefined;
 
-    if (!oldRefreshToken)
-      throw new UnauthorizedException('token expired or missing');
+    if (!oldRefreshToken) throw new UnauthorizedException(TOKEN_EXPIRED);
 
     const payload =
       await this._tokenService.verifyRefreshToken(oldRefreshToken);
 
-    if (!payload) throw new UnauthorizedException('Token Expired');
+    if (!payload) throw new UnauthorizedException(TOKEN_EXPIRED);
 
     const refreshToken = await this._tokenService.signRefreshToken({
       userId: payload.userId,

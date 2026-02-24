@@ -3,6 +3,7 @@ import type { AuthUserRepository } from '../ports/auth-user-repository.port';
 import type { PasswordService } from '../ports/password.service.port';
 import type { TokenService } from '../ports/token.service.port';
 import {
+  GOOGLE_LOGIN_INSTEAD,
   INVALID_CREDENTIALS,
   NOT_REGISTERED,
   NOT_VERIFIED,
@@ -32,7 +33,7 @@ export class LoginUseCase {
     if (user === null) throw new UnauthorizedException(NOT_REGISTERED);
     if (!user.isVerified) throw new UnauthorizedException(NOT_VERIFIED);
     if (user.provider === 'GOOGLE')
-      throw new UnauthorizedException('User Google Login Instead');
+      throw new UnauthorizedException(GOOGLE_LOGIN_INSTEAD);
     const isValid = await this._passwordService.compare(pass, user.password);
     if (!isValid) throw new UnauthorizedException(INVALID_CREDENTIALS);
     const payload = { userId: user.userId, role: user.role };

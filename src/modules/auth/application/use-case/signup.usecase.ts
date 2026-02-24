@@ -4,7 +4,10 @@ import type { OtpService } from '../ports/otp.service.port';
 import type { EmailService } from '../ports/email.service.port';
 import type { AuthUserRepository } from '../ports/auth-user-repository.port';
 import type { IdGenerator } from '../ports/id-generator.port';
-import { ALREADY_REGISTERED } from '../constants/error-message.const';
+import {
+  ALREADY_REGISTERED,
+  SIGNUP_AGAIN,
+} from '../constants/error-message.const';
 import {
   AUTH_USER_REPOSITORY,
   EMAIL_SERVICE,
@@ -58,7 +61,7 @@ export class SignupUseCase {
     } else {
       user = await this._authRepo.create(userDetails);
     }
-    if (!user) throw new BadRequestException('Signup again');
+    if (!user) throw new BadRequestException(SIGNUP_AGAIN);
     const { otp, sessionId } = await this._otpService.generate(
       user.userId,
       user.email,
