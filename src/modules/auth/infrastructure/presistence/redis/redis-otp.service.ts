@@ -3,7 +3,13 @@ import bcrypt from 'bcryptjs';
 import { redis } from './redis.client';
 import { UnauthorizedException } from '@nestjs/common';
 import { OtpService } from 'src/modules/auth/application/ports/otp.service.port';
-import { OTP_SESSION_EXPIRED } from 'src/modules/auth/application/constants/error-message.const';
+import {
+  INVALID_OTP_ATTEMPT,
+  INVALID_SESSION,
+  OTP_SESSION_EXPIRED,
+  TOO_MANY_ATTEMPTS,
+  WAIT_BEFORE_RESEND,
+} from 'src/modules/auth/application/constants/error-message.const';
 
 type OtpType = 'signup' | 'forgot';
 
@@ -50,7 +56,7 @@ export class RedisOtpService implements OtpService {
     try {
       return JSON.parse(value) as T;
     } catch {
-      throw new UnauthorizedException('Invalid session data');
+      throw new UnauthorizedException(INVALID_SESSION);
     }
   }
 
@@ -99,7 +105,7 @@ export class RedisOtpService implements OtpService {
     const session = this.parseJSON<OtpSession>(sessionRaw);
 
     if (!dataRaw) {
-      throw new UnauthorizedException('OTP expired');
+      throw new UnauthorizedException(OTP_SESSION_EXPIRED);
     }
 
     const data = this.parseJSON<OtpData>(dataRaw);
@@ -126,7 +132,7 @@ export class RedisOtpService implements OtpService {
         ttl > 0 ? ttl : this.OTP_TTL,
       );
 
-      throw new UnauthorizedException('Invalid OTP');
+      throw new UnauthorizedException(INVALID_OTP_ATTEMPT);
     }
 
     await redis.del(this.dataKey(sessionId));
@@ -140,11 +146,11 @@ export class RedisOtpService implements OtpService {
     const session = this.parseJSON<OtpSession>(sessionRaw);
 
     if (session.resendCount >= this.MAX_RESENDS) {
-      throw new UnauthorizedException('Resend limit reached');
+      throw new UnauthorizedException(TOO_MANY_ATTEMPTS);
     }
 
     if (await redis.get(this.cooldownKey(session.userId))) {
-      throw new UnauthorizedException('Wait before resending OTP');
+      throw new UnauthorizedException(WAIT_BEFORE_RESEND);
     }
 
     await redis.set(

@@ -25,6 +25,7 @@ import { OtpVerifyUsecase } from '../../application/use-case/otp-verify.usecase'
 import { RefreshTokenUseCase } from '../../application/use-case/refresh-token.usecase';
 import { ResendOtpUsecase } from '../../application/use-case/resend-otp.usecase';
 import { SignupUseCase } from '../../application/use-case/signup.usecase';
+import { LogoutUseCase } from '../../application/use-case/logout.usecase';
 
 export const authProviders = [
   {
@@ -71,4 +72,5 @@ export const authProviders = [
   RefreshTokenUseCase,
   ResendOtpUsecase,
   SignupUseCase,
+  LogoutUseCase,
 ];

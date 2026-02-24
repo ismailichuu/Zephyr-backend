@@ -7,6 +7,8 @@ import {
   EMAIL_SERVICE,
   OTP_SERVICE,
 } from '../ports/auth.token';
+import { FORGOT_PASSWORD_SUCCESS } from '../constants/success-message.const';
+import { NOT_REGISTERED } from '../constants/error-message.const';
 
 @Injectable()
 export class ForgotPasswordUsecase {
@@ -21,7 +23,7 @@ export class ForgotPasswordUsecase {
 
   async execute(email: string) {
     const user = await this._authRepo.findByEmail(email);
-    if (!user) throw new BadRequestException('Email not regitered');
+    if (!user) throw new BadRequestException(NOT_REGISTERED);
 
     const { otp, sessionId } = await this._otpService.generate(
       user.userId,
@@ -30,7 +32,8 @@ export class ForgotPasswordUsecase {
     );
     await this._emailService.sendEmailForgot(user.email, otp);
     return {
-      sessionId,
+      message: FORGOT_PASSWORD_SUCCESS,
+      otpSessionId: sessionId,
     };
   }
 }

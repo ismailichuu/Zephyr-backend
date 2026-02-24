@@ -7,6 +7,12 @@ import {
   OTP_SERVICE,
   TOKEN_SERVICE,
 } from '../ports/auth.token';
+import { Response } from 'express';
+import {
+  OTP_VERIFICATION_FORGOT_SUCCESS,
+  OTP_VERIFICATION_SUCCESS,
+} from '../constants/success-message.const';
+import { NOT_FOUND } from '../constants/error-message.const';
 
 @Injectable()
 export class OtpVerifyUsecase {
@@ -19,36 +25,58 @@ export class OtpVerifyUsecase {
     private readonly _tokeService: TokenService,
   ) {}
 
-  async execute(otp: string, sessionId: string, type: string) {
+  async execute(otp: string, sessionId: string, type: string, res: Response) {
     const email = await this._otpService.verify(sessionId, otp, 'signup');
 
     let user = await this._authRepo.findByEmail(email);
-    if (!user) throw new UnauthorizedException('user not found');
+    if (!user) throw new UnauthorizedException(NOT_FOUND);
 
     const payload = { userId: user.userId, role: user.role };
 
     if (type === 'signup') {
       user = await this._authRepo.update(user.userId, { isVerified: true });
-      if (!user) throw new UnauthorizedException('User Not found');
+      if (!user) throw new UnauthorizedException(NOT_FOUND);
       const refreshToken = await this._tokeService.signRefreshToken(payload);
       const accessToken = await this._tokeService.signAccessToken(payload);
 
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+        path: '/auth/refresh',
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 15 * 60 * 1000,
+      });
+
       return {
-        type: 'SIGNUP_SUCCESS',
+        message: OTP_VERIFICATION_SUCCESS,
         user: {
           role: user.role,
         },
-        refreshToken,
-        accessToken,
       };
     }
+
     const resetPayload = { type: 'password-reset', ...payload };
     const resetToken = await this._tokeService.signResetToken(resetPayload);
+
+    res.cookie('resetToken', resetToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      path: '/auth/change-password',
+      maxAge: 10 * 60 * 10000,
+    });
+
     return {
-      type: 'FORGOT_SUCCESS',
-      readyToLogin: true,
-      userId: user.userId,
-      resetToken,
+      message: OTP_VERIFICATION_FORGOT_SUCCESS,
+      readyToChange: true,
     };
   }
 }

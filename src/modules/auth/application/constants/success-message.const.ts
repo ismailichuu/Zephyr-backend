@@ -1,0 +1,15 @@
+export const LOGIN_SUCCESS = 'Login Successful';
+export const OTP_VERIFICATION_SUCCESS = 'verification successful';
+export const OTP_VERIFICATION_FORGOT_SUCCESS = 'otp verified successfully';
+export const OTP_RESEND_SUCCESS = 'Otp Resend Successful';
+export const LOGOUT_SUCCESS = 'Logout Successful';
+export const PASSWORD_CHANGE_SUCCESS = 'Password Change Successful';
+export const ACCOUNT_VERIFICATION_SUCCESS = 'Account Verification Successful';
+export const GOOGLE_LOGIN_SUCCESS = 'Google Login Successful';
+export const GOOGLE_REGISTER_SUCCESS = 'Google Register Successful';
+export const REFRESH_SUCCESS = 'Token Refresh Successful';
+export const USER_VERIFICATION_SUCCESS = 'User verification successful';
+export const USER_OTP_RESEND_SUCCESS = 'User OTP Resend Successful';
+export const USER_ = 'User creation successful, Please verify your email';
+export const FORGOT_PASSWORD_SUCCESS = 'Forgot Password OTP Sent Successfully';
+export const PASSWORD_RESET_SUCCESS = 'Password Reset Successful';

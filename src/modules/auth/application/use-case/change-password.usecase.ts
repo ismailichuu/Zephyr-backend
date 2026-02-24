@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { NOT_FOUND, TOKEN_EXPIRED } from '../constants/error-message.const';
+import { NOT_FOUND, SESSION_EXPIRED } from '../constants/error-message.const';
 import type { AuthUserRepository } from '../ports/auth-user-repository.port';
 import type { PasswordService } from '../ports/password.service.port';
 import type { TokenService } from '../ports/token.service.port';
@@ -8,6 +8,8 @@ import {
   PASSWORD_SERVICE,
   TOKEN_SERVICE,
 } from '../ports/auth.token';
+import { Request, Response } from 'express';
+import { PASSWORD_RESET_SUCCESS } from '../constants/success-message.const';
 
 @Injectable()
 export class ChangePasswordUsecase {
@@ -20,9 +22,12 @@ export class ChangePasswordUsecase {
     private readonly _tokenService: TokenService,
   ) {}
 
-  async execute(password: string, token: string) {
+  async execute(req: Request, res: Response, password: string) {
+    const token = req.cookies.resetToken as string | undefined;
+    if (!token) throw new UnauthorizedException(SESSION_EXPIRED);
+
     const payload = await this._tokenService.verifyResetToken(token);
-    if (!payload) throw new UnauthorizedException(TOKEN_EXPIRED);
+    if (!payload) throw new UnauthorizedException(SESSION_EXPIRED);
     const user = await this._userRepo.findById(payload.userId);
 
     if (!user) throw new UnauthorizedException(NOT_FOUND);
@@ -31,7 +36,12 @@ export class ChangePasswordUsecase {
 
     await this._userRepo.update(payload.userId, { password: hashedPassword });
 
+    res.clearCookie('resetToken', {
+      path: '/auth/change-password',
+    });
+
     return {
+      message: PASSWORD_RESET_SUCCESS,
       readyToLogin: true,
     };
   }
