@@ -33,6 +33,7 @@ import { GOOGLE_AUTH_GATEWAY } from '../application/ports/auth.token';
 import { RefreshTokenUseCase } from '../application/use-case/refresh-token.usecase';
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
 import { LogoutUseCase } from '../application/use-case/logout.usecase';
+import { AdminLoginUsecase } from '../application/use-case/admin-login.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -46,6 +47,7 @@ export class AuthController {
     private readonly _changePasswordUsecase: ChangePasswordUsecase,
     private readonly _resendOtpUsecase: ResendOtpUsecase,
     private readonly _logoutUseCase: LogoutUseCase,
+    private readonly _adminLoginUsecase: AdminLoginUsecase,
     @Inject(GOOGLE_AUTH_GATEWAY)
     private readonly _googleAuthService: GoogleAuthPort,
   ) {}
@@ -55,6 +57,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {
     return this._loginUseCase.execute(dto.email, dto.password, res);
+  }
+
+  //login with email and password admin
+  @Post('admin/login')
+  @HttpCode(HttpStatus.OK)
+  adminLogin(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {
+    return this._adminLoginUsecase.execute(dto.email, dto.password, res);
   }
 
   //signup with email and password
