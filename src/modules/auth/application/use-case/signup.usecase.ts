@@ -38,7 +38,7 @@ export class SignupUseCase {
 
   async execute(name: string, email: string, password: string, role: Role) {
     const isAlready = await this._authRepo.findByEmail(email);
-    if (isAlready && isAlready.isVerified)
+    if (isAlready && isAlready.isOtpVerified)
       throw new BadRequestException(ALREADY_REGISTERED);
     const hashedPassword = await this._passwordService.hash(password);
     const userId = this._idGenerator.generateForRole(role);
@@ -49,14 +49,15 @@ export class SignupUseCase {
       role: role as unknown as UserRole,
       userId,
       isPremium: false,
-      isVerified: false,
+      isOtpVerified: false,
       subscriptionId: null,
       status: UserStatus.ACTIVE,
       provider: 'NORMAL',
       joinedAt: null,
+      isAdminApproved: role === Role.FREELANCER ? true : false,
     });
     let user: User | null;
-    if (isAlready && !isAlready?.isVerified) {
+    if (isAlready && !isAlready?.isOtpVerified) {
       user = await this._authRepo.update(isAlready.userId, userDetails);
     } else {
       user = await this._authRepo.create(userDetails);

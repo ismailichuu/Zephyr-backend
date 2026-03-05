@@ -22,7 +22,8 @@ export class GetAllUsersUsecase {
       name: user.name,
       email: user.email,
       role: user.role,
-      isVerified: user.isVerified,
+      isOtpVerified: user.isOtpVerified,
+      isAdminApproved: user.isAdminApproved,
       joinedAt: user.joinedAt,
       status: user.status,
     }));

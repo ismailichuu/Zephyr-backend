@@ -7,6 +7,7 @@ export const ROLE_MISMATCH = 'User role mismatch';
 export const OTP_EXPIRED = 'OTP expired';
 export const GOOGLE_LOGIN_INSTEAD = 'Use Google Login Instead';
 export const SIGNUP_AGAIN = 'Signup again';
+export const USER_BLOCKED = 'Sorry, you have been blocked!';
 
 //otp
 export const OTP_SESSION_EXPIRED = 'Otp Session Expired! Signup again';

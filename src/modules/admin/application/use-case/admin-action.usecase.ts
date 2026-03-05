@@ -12,9 +12,21 @@ export class AdminActionUsecase {
     private readonly _userRepo: AdminUserRepositoryPort,
   ) {}
 
-  async execute(userId: string, action: UserStatus) {
+  async execute(userId: string, action: UserStatus | 'VERIFY') {
     const user = await this._userRepo.findById(userId);
     if (!user) throw new BadRequestException(USER_NOT_EXIST);
+
+    if (action === 'VERIFY') {
+      if (user.isAdminApproved)
+        throw new BadRequestException('User is already verified');
+      const userUpdated = await this._userRepo.update(userId, {
+        isAdminApproved: true,
+      });
+      return {
+        message: USER_UPDATE_SUCCESS,
+        isAdminApproved: userUpdated?.isAdminApproved,
+      };
+    }
 
     const userUpdated = await this._userRepo.update(userId, { status: action });
 

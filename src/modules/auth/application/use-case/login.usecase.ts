@@ -1,12 +1,17 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import type { AuthUserRepository } from '../ports/auth-user-repository.port';
 import type { PasswordService } from '../ports/password.service.port';
 import type { TokenService } from '../ports/token.service.port';
 import {
   GOOGLE_LOGIN_INSTEAD,
   INVALID_CREDENTIALS,
-  NOT_REGISTERED,
   NOT_VERIFIED,
+  USER_BLOCKED,
 } from '../constants/error-message.const';
 import {
   AUTH_USER_REPOSITORY,
@@ -15,6 +20,8 @@ import {
 } from '../ports/auth.token';
 import { Response } from 'express';
 import { LOGIN_SUCCESS } from '../constants/success-message.const';
+import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
+import { UserRole } from 'src/modules/user/domain/enums/role.enum';
 
 @Injectable()
 export class LoginUseCase {
@@ -30,10 +37,14 @@ export class LoginUseCase {
   async execute(email: string, pass: string, res: Response) {
     const user = await this._authRepo.findByEmail(email);
 
-    if (user === null) throw new UnauthorizedException(NOT_REGISTERED);
-    if (!user.isVerified) throw new UnauthorizedException(NOT_VERIFIED);
+    if (user === null) throw new UnauthorizedException(INVALID_CREDENTIALS);
+    if (user.role === UserRole.ADMIN)
+      throw new UnauthorizedException(INVALID_CREDENTIALS);
+    if (!user.isOtpVerified) throw new UnauthorizedException(NOT_VERIFIED);
     if (user.provider === 'GOOGLE')
       throw new UnauthorizedException(GOOGLE_LOGIN_INSTEAD);
+    if (user.status === UserStatus.BLOCKED)
+      throw new BadRequestException(USER_BLOCKED);
     const isValid = await this._passwordService.compare(pass, user.password);
     if (!isValid) throw new UnauthorizedException(INVALID_CREDENTIALS);
     const payload = { userId: user.userId, role: user.role };

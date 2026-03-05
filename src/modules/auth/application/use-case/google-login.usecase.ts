@@ -48,11 +48,12 @@ export class GoogleLoginUseCase {
         role,
         userId: id,
         isPremium: false,
-        isVerified: true,
+        isOtpVerified: true,
         subscriptionId: null,
         status: UserStatus.ACTIVE,
         provider: 'GOOGLE',
         joinedAt: null,
+        isAdminApproved: role === UserRole.FREELANCER ? true : false,
       });
 
       await this._userRepo.create(user);

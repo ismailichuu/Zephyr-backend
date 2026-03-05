@@ -22,7 +22,7 @@ export class UserDocument extends Document {
   role: string;
 
   @Prop({ default: false })
-  isVerified: boolean;
+  isOtpVerified: boolean;
 
   @Prop({ enum: Providers, default: Providers.NORMAL })
   provider: string;
@@ -35,6 +35,9 @@ export class UserDocument extends Document {
 
   @Prop({ enum: UserStatus, default: UserStatus.ACTIVE })
   status: string;
+
+  @Prop({ default: false })
+  isAdminApproved: boolean;
 
   createdAt?: Date;
   updatedAt?: Date;

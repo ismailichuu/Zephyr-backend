@@ -19,11 +19,12 @@ export class UserRepositoryMongo implements UserRepository {
       password: userDoc.password,
       role: userDoc.role as UserRole,
       provider: userDoc.provider,
-      isVerified: userDoc.isVerified,
+      isOtpVerified: userDoc.isOtpVerified,
       isPremium: userDoc.isPremium,
       subscriptionId: userDoc.subscriptionId,
       status: userDoc.status as UserStatus,
       joinedAt: userDoc.createdAt || null,
+      isAdminApproved: userDoc.isAdminApproved,
     });
   }
 
@@ -34,8 +35,9 @@ export class UserRepositoryMongo implements UserRepository {
       email: user.email,
       password: user.password,
       role: user.role,
-      isVerified: user.isVerified,
+      isOtpVerified: user.isOtpVerified,
       provider: user.provider,
+      isAdminApproved: user.isAdminApproved,
     };
   }
 
@@ -55,7 +57,6 @@ export class UserRepositoryMongo implements UserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    console.log('Finding user by ID:', id);
     const userDoc = await this._userModel.findOne({ userId: id }).exec();
     return userDoc ? this.toDomain(userDoc) : null;
   }

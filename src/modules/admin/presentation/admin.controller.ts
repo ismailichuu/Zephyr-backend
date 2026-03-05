@@ -22,6 +22,7 @@ export class AdminController {
     private readonly _getUserDetailsUsecase: GetUserDetailsUsecase,
   ) {}
 
+  //* Admin routes for user management
   @Get('user')
   @HttpCode(HttpStatus.OK)
   getAllUsers(@Query() query: GetAllUsersDto) {
@@ -32,12 +33,14 @@ export class AdminController {
     return this._getAllUserUsecase.execute(page, limit, search);
   }
 
+  //? Admin actions: VERIFY, BLOCK, UNBLOCK
   @Patch('/user')
   @HttpCode(HttpStatus.OK)
   adminAction(@Body() dto: AdminActionDto) {
     return this._adminActionUsecase.execute(dto.userId, dto.action);
   }
 
+  //? Get user details by ID
   @Get('/user/:id')
   @HttpCode(HttpStatus.OK)
   getUserById(@Param('id') id: string) {

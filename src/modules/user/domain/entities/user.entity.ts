@@ -9,12 +9,17 @@ export class User {
     private _password: string,
     private _role: UserRole,
     private _provider: string = 'normal',
-    private _isVerified: boolean = false,
+    private _isOtpVerified: boolean = false,
     private _isPremium: boolean,
     private _subscriptionId: string | null,
     private _status: UserStatus = UserStatus.ACTIVE,
     private _joinedAt: Date | null,
+    private _isAdminApproved: boolean,
   ) {}
+
+  get isAdminApproved(): boolean {
+    return this._isAdminApproved;
+  }
 
   get userId(): string {
     return this._userId;
@@ -36,8 +41,8 @@ export class User {
     return this._provider;
   }
 
-  get isVerified(): boolean {
-    return this._isVerified;
+  get isOtpVerified(): boolean {
+    return this._isOtpVerified;
   }
 
   get name(): string {
@@ -79,11 +84,12 @@ export class User {
     password: string;
     role: UserRole;
     provider: string;
-    isVerified: boolean;
+    isOtpVerified: boolean;
     isPremium: boolean;
     subscriptionId: string | null;
     status: UserStatus;
     joinedAt: Date | null;
+    isAdminApproved: boolean;
   }): User {
     return new User(
       params.userId,
@@ -92,11 +98,12 @@ export class User {
       params.password,
       params.role,
       params.provider || 'normal',
-      params.isVerified || false,
+      params.isOtpVerified || false,
       params.isPremium || false,
       params.subscriptionId || null,
       params.status || UserStatus.ACTIVE,
       params.joinedAt || null,
+      params.isAdminApproved || false,
     );
   }
 }

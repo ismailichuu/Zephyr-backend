@@ -26,6 +26,7 @@ import { RefreshTokenUseCase } from '../../application/use-case/refresh-token.us
 import { ResendOtpUsecase } from '../../application/use-case/resend-otp.usecase';
 import { SignupUseCase } from '../../application/use-case/signup.usecase';
 import { LogoutUseCase } from '../../application/use-case/logout.usecase';
+import { AdminLoginUsecase } from '../../application/use-case/admin-login.usecase';
 
 export const authProviders = [
   {
@@ -73,4 +74,5 @@ export const authProviders = [
   ResendOtpUsecase,
   SignupUseCase,
   LogoutUseCase,
+  AdminLoginUsecase,
 ];

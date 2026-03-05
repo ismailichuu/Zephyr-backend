@@ -34,11 +34,12 @@ export class OtpVerifyUsecase {
     const payload = { userId: user.userId, role: user.role };
 
     if (type === 'signup') {
-      user = await this._authRepo.update(user.userId, { isVerified: true });
+      user = await this._authRepo.update(user.userId, {
+        isOtpVerified: true,
+      });
       if (!user) throw new UnauthorizedException(NOT_FOUND);
       const refreshToken = await this._tokeService.signRefreshToken(payload);
       const accessToken = await this._tokeService.signAccessToken(payload);
-
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true,
