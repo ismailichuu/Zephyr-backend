@@ -27,6 +27,7 @@ import { ResendOtpUsecase } from '../../application/use-case/resend-otp.usecase'
 import { SignupUseCase } from '../../application/use-case/signup.usecase';
 import { LogoutUseCase } from '../../application/use-case/logout.usecase';
 import { AdminLoginUsecase } from '../../application/use-case/admin-login.usecase';
+import { JwtStrategy } from '../strategies/jwt.strategy';
 
 export const authProviders = [
   {
@@ -64,6 +65,8 @@ export const authProviders = [
     },
     inject: [JwtService],
   },
+  //strategy
+  JwtStrategy,
   //usecases
   ChangePasswordUsecase,
   ForgotPasswordUsecase,
