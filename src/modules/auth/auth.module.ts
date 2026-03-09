@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { loadJwtModuleOptions } from './infrastructure/config/jwt-module.config';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
+import { TOKEN_VERIFIER } from '../freelancer/application/ports/freelancer.token';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { PassportModule } from '@nestjs/passport';
   ],
   controllers: [AuthController],
   providers: [...authProviders],
-  exports: [JwtModule, PassportModule],
+  exports: [JwtModule, PassportModule, TOKEN_VERIFIER],
 })
 export class AuthModule {}

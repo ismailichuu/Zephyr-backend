@@ -3,10 +3,11 @@ import { TokenPayload } from 'google-auth-library';
 import { StringValue } from 'ms';
 import { TokenService } from 'src/modules/auth/application/ports/token.service.port';
 import { ResetTokenPayload } from 'src/modules/auth/application/types/tokenPayload.type';
+import { TokenVerifier } from 'src/modules/freelancer/application/ports/token-verifier.port';
 
 export type JwtPayload = TokenPayload & {};
 
-export class JwtTokenService implements TokenService {
+export class JwtTokenService implements TokenService, TokenVerifier {
   constructor(
     private readonly jwt: JwtService,
     private readonly config: {
@@ -21,7 +22,7 @@ export class JwtTokenService implements TokenService {
   async signResetToken(payload: object): Promise<string> {
     return this.jwt.signAsync(payload, {
       secret: this.config.resetSecret,
-      expiresIn: this.config.accessExpiry,
+      expiresIn: this.config.resetExpiry,
     });
   }
   async verifyResetToken(token: string): Promise<ResetTokenPayload> {

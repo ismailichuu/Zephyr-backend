@@ -28,6 +28,7 @@ import { SignupUseCase } from '../../application/use-case/signup.usecase';
 import { LogoutUseCase } from '../../application/use-case/logout.usecase';
 import { AdminLoginUsecase } from '../../application/use-case/admin-login.usecase';
 import { JwtStrategy } from '../strategies/jwt.strategy';
+import { TOKEN_VERIFIER } from 'src/modules/freelancer/application/ports/freelancer.token';
 
 export const authProviders = [
   {
@@ -50,13 +51,8 @@ export const authProviders = [
     provide: GOOGLE_AUTH_GATEWAY,
     useClass: GoogleAuthService,
   },
-  {
-    provide: EMAIL_SERVICE,
-    useFactory: () => {
-      const config = loadEmailConfig();
-      return new NodemailerEmailService(config);
-    },
-  },
+
+  // create JwtTokenService properly
   {
     provide: TOKEN_SERVICE,
     useFactory: (jwt: JwtService) => {
@@ -65,9 +61,23 @@ export const authProviders = [
     },
     inject: [JwtService],
   },
-  //strategy
+
+  // reuse same instance for freelancer
+  {
+    provide: TOKEN_VERIFIER,
+    useExisting: TOKEN_SERVICE,
+  },
+
+  {
+    provide: EMAIL_SERVICE,
+    useFactory: () => {
+      const config = loadEmailConfig();
+      return new NodemailerEmailService(config);
+    },
+  },
+
   JwtStrategy,
-  //usecases
+
   ChangePasswordUsecase,
   ForgotPasswordUsecase,
   GoogleLoginUseCase,
