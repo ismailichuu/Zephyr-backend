@@ -7,6 +7,7 @@ import { userProviders } from './infrastructure/di/user.provider';
 import { UserRepository } from './domain/repositories/user.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FREELANCER_USER_REPOSITORY } from '../freelancer/application/ports/freelancer.token';
+import { CLIENT_USER_REPOSITORY } from '../client/application/ports/client.token';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { FREELANCER_USER_REPOSITORY } from '../freelancer/application/ports/free
     ]),
   ],
   providers: [...userProviders],
-  exports: [UserRepository, FREELANCER_USER_REPOSITORY],
+  exports: [UserRepository, FREELANCER_USER_REPOSITORY, CLIENT_USER_REPOSITORY],
 })
 export class UserModule {}

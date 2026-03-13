@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Experience } from 'src/modules/freelancer/domain/entities/freelancer-profile.entity';
 import { Availability } from 'src/modules/freelancer/domain/enums/freelancer-availability.enum';
-import { Experience } from 'src/modules/freelancer/entity/freelancer-profile.entity';
 
 @Schema({ timestamps: true })
 export class FreelancerProfileDocument extends Document {
@@ -30,7 +30,7 @@ export class FreelancerProfileDocument extends Document {
   experience: Experience[] | [];
 
   @Prop({ type: String, required: false })
-  portofolioUrl: string | null;
+  portfolioUrl: string | null;
 
   createdAt?: Date;
   updatedAt?: Date;

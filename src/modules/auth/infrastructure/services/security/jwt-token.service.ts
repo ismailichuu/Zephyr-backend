@@ -3,11 +3,10 @@ import { TokenPayload } from 'google-auth-library';
 import { StringValue } from 'ms';
 import { TokenService } from 'src/modules/auth/application/ports/token.service.port';
 import { ResetTokenPayload } from 'src/modules/auth/application/types/tokenPayload.type';
-import { TokenVerifier } from 'src/modules/freelancer/application/ports/token-verifier.port';
 
 export type JwtPayload = TokenPayload & {};
 
-export class JwtTokenService implements TokenService, TokenVerifier {
+export class JwtTokenService implements TokenService {
   constructor(
     private readonly jwt: JwtService,
     private readonly config: {

@@ -1,2 +1,3 @@
-export const TOKEN_VERIFIER = Symbol('TOKEN_VERIFIER');
 export const FREELANCER_USER_REPOSITORY = Symbol('FREELANCER_USER_REPOSITORY');
+export const UPLOAD_SERVICE = Symbol('UPLOAD_SERVICE');
+export const FILE_VALIDATOR = Symbol('FILE_VALIDATOR');

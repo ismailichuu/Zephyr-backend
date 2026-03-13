@@ -9,6 +9,7 @@ import {
 } from './infrastructure/presistence/mongo/freelancer-profile/freelancer-profile.schema';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
+import { FILE_VALIDATOR_PORT } from '../client/application/ports/client.token';
 
 @Module({
   imports: [
@@ -21,5 +22,6 @@ import { UserModule } from '../user/user.module';
   ],
   controllers: [FreelancerController],
   providers: [...freelancerProviders],
+  exports: [FILE_VALIDATOR_PORT],
 })
 export class FreelancerModule {}

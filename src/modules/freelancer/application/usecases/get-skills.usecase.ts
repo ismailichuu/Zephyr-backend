@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SkillRepository } from '../../domain/repositories/skill.repository';
 import { SKILL_FETCH_SUCCESS } from '../constants/success-message.const';
-import { Skill } from '../../domain/entity/skill.entity';
+import { Skill } from '../../domain/entities/skill.entity';
 
 @Injectable()
 export class GetSkillsUsecase {

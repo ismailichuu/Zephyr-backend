@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Skill } from 'src/modules/freelancer/domain/entity/skill.entity';
+import { Skill } from 'src/modules/freelancer/domain/entities/skill.entity';
 import { SkillRepository } from 'src/modules/freelancer/domain/repositories/skill.repository';
 import { SkillDocument } from './skill.schema';
 import { InjectModel } from '@nestjs/mongoose';

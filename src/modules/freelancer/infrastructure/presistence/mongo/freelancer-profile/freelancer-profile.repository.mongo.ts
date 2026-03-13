@@ -1,4 +1,4 @@
-import { FreelancerProfile } from 'src/modules/freelancer/domain/entity/freelancer-profile.entity';
+import { FreelancerProfile } from 'src/modules/freelancer/domain/entities/freelancer-profile.entity';
 import { FreelancerProfileRepository } from 'src/modules/freelancer/domain/repositories/freelancer-profile.repository';
 import { FreelancerProfileDocument } from './freelancer-profile.schema';
 import { Model } from 'mongoose';
@@ -22,7 +22,7 @@ export class FreelancerProfileRepositoryMongo implements FreelancerProfileReposi
       availability: FreelancerProfileDoc.availability as Availability,
       location: FreelancerProfileDoc.location,
       experience: FreelancerProfileDoc.experience,
-      portfolioUrl: FreelancerProfileDoc.portofolioUrl,
+      portfolioUrl: FreelancerProfileDoc.portfolioUrl,
       updatedAt: FreelancerProfileDoc.updatedAt ?? null,
     });
   }
@@ -39,7 +39,7 @@ export class FreelancerProfileRepositoryMongo implements FreelancerProfileReposi
       availability: freelancerProfile.availability,
       location: freelancerProfile.location,
       experience: freelancerProfile.experience ?? [],
-      portofolioUrl: freelancerProfile.portfolioUrl,
+      portfolioUrl: freelancerProfile.portfolioUrl,
     };
   }
 
@@ -71,7 +71,7 @@ export class FreelancerProfileRepositoryMongo implements FreelancerProfileReposi
     entity: Partial<FreelancerProfile>,
   ): Promise<FreelancerProfile | null> {
     const updatedProfile = await this._freelancerProfileModel
-      .findOneAndUpdate({ userId: id }, entity, { new: true })
+      .findOneAndUpdate({ userId: id }, entity, { returnDocument: 'after' })
       .exec();
 
     return updatedProfile ? this._toDomain(updatedProfile) : null;

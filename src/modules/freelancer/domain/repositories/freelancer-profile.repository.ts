@@ -1,5 +1,5 @@
 import { BaseRepository } from 'src/modules/shared/repositories/base.repository';
-import { FreelancerProfile } from '../entity/freelancer-profile.entity';
+import { FreelancerProfile } from '../entities/freelancer-profile.entity';
 
 export abstract class FreelancerProfileRepository implements BaseRepository<FreelancerProfile> {
   abstract findById(id: string): Promise<FreelancerProfile | null>;

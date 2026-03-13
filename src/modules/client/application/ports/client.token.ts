@@ -1,0 +1,3 @@
+export const CLIENT_USER_REPOSITORY = Symbol('CLIENT_USER_REPOSITORY');
+export const FILE_VALIDATOR_PORT = Symbol('FILE_VALIDATOR_PORT');
+export const FILE_UPLOADER = Symbol('FILE_UPLOADER');

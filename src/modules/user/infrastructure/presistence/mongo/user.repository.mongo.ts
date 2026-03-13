@@ -68,7 +68,7 @@ export class UserRepositoryMongo implements UserRepository {
 
   async update(id: string, entity: Partial<User>): Promise<User | null> {
     const updatedUser = await this._userModel
-      .findOneAndUpdate({ userId: id }, entity, { new: true })
+      .findOneAndUpdate({ userId: id }, entity, { returnDocument: 'after' })
       .exec();
 
     return updatedUser ? this.toDomain(updatedUser) : null;

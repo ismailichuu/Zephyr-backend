@@ -1,44 +1,38 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import type { TokenVerifier } from '../ports/token-verifier.port';
-import {
-  FREELANCER_USER_REPOSITORY,
-  TOKEN_VERIFIER,
-} from '../ports/freelancer.token';
+import { FREELANCER_USER_REPOSITORY } from '../ports/freelancer.token';
 import {
   NOT_FOUND,
   TOKEN_EXPIRED,
 } from 'src/modules/auth/application/constants/error-message.const';
 import { FreelancerProfileRepository } from '../../domain/repositories/freelancer-profile.repository';
-import { FreelancerProfile } from '../../domain/entity/freelancer-profile.entity';
-import { Availability } from '../../domain/enums/freelancer-availability.enum';
+import { FreelancerProfile } from '../../domain/entities/freelancer-profile.entity';
 import { PROFILE_FETCH_SUCCESS } from '../constants/success-message.const';
 import type { FreelancerUserRepository } from '../ports/freelancer-user.repository.port';
+import { Availability } from '../../domain/enums/freelancer-availability.enum';
 
 @Injectable()
 export class GetProfileUsecase {
   constructor(
-    @Inject(TOKEN_VERIFIER)
-    private readonly _tokenVerifier: TokenVerifier,
     private readonly _freelancerProfileRepo: FreelancerProfileRepository,
     @Inject(FREELANCER_USER_REPOSITORY)
     private readonly _freelancerUserRepo: FreelancerUserRepository,
   ) {}
 
   async execute(req: Request) {
-    const token = req.cookies?.accessToken as string | undefined;
-    if (!token) throw new UnauthorizedException(TOKEN_EXPIRED);
+    const userPayload = req.user as { userId: string; role: string };
 
-    const isValid = await this._tokenVerifier.verifyAccessToken(token);
-    if (!isValid) throw new UnauthorizedException(TOKEN_EXPIRED);
+    if (!userPayload) throw new UnauthorizedException(TOKEN_EXPIRED);
 
-    let profile = await this._freelancerProfileRepo.findById(isValid.userId);
-    const user = await this._freelancerUserRepo.findById(isValid.userId);
+    let profile = await this._freelancerProfileRepo.findById(
+      userPayload.userId,
+    );
+    const user = await this._freelancerUserRepo.findById(userPayload.userId);
     if (!user) throw new UnauthorizedException(NOT_FOUND);
     if (!profile) {
       const freelancerProfile = FreelancerProfile.create({
         id: null,
-        userId: isValid.userId,
+        userId: userPayload.userId,
         imageUrl: null,
         jobCategory: null,
         jobSubCategory: null,

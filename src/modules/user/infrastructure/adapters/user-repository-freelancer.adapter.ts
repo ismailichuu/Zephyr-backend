@@ -7,7 +7,11 @@ import { FreelancerUserRepository } from 'src/modules/freelancer/application/por
 export class UserRepositoryFreelancerAdapter implements FreelancerUserRepository {
   constructor(private readonly _userRepo: UserRepository) {}
 
-  async findById(id: string): Promise<User | null> {
-    return await this._userRepo.findById(id);
+  findById(id: string): Promise<User | null> {
+    return this._userRepo.findById(id);
+  }
+
+  update(id: string, entity: Partial<User>): Promise<User | null> {
+    return this._userRepo.update(id, entity);
   }
 }
