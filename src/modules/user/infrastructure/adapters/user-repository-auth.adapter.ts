@@ -1,11 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { UserRepository } from '../../domain/repositories/user.repository';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  USER_REPOSITORY,
+  type UserRepository,
+} from '../../domain/repositories/user.repository';
 import { User } from '../../domain/entities/user.entity';
 import { AuthUserRepository } from 'src/modules/auth/application/ports/auth-user-repository.port';
 
 @Injectable()
 export class UserRepositoryAuthAdapter implements AuthUserRepository {
-  constructor(private readonly _userRepo: UserRepository) {}
+  constructor(
+    @Inject(USER_REPOSITORY)
+    private readonly _userRepo: UserRepository,
+  ) {}
   async findByEmail(email: string): Promise<User | null> {
     return await this._userRepo.findByEmail(email);
   }

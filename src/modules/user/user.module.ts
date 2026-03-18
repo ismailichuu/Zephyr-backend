@@ -4,7 +4,7 @@ import {
   UserSchema,
 } from './infrastructure/presistence/mongo/user.schema';
 import { userProviders } from './infrastructure/di/user.provider';
-import { UserRepository } from './domain/repositories/user.repository';
+import { USER_REPOSITORY } from './domain/repositories/user.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FREELANCER_USER_REPOSITORY } from '../freelancer/application/ports/freelancer.token';
 import { CLIENT_USER_REPOSITORY } from '../client/application/ports/client.token';
@@ -16,6 +16,10 @@ import { CLIENT_USER_REPOSITORY } from '../client/application/ports/client.token
     ]),
   ],
   providers: [...userProviders],
-  exports: [UserRepository, FREELANCER_USER_REPOSITORY, CLIENT_USER_REPOSITORY],
+  exports: [
+    USER_REPOSITORY,
+    FREELANCER_USER_REPOSITORY,
+    CLIENT_USER_REPOSITORY,
+  ],
 })
 export class UserModule {}

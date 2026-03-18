@@ -1,11 +1,17 @@
 import { AdminUserRepositoryPort } from 'src/modules/admin/application/ports/admin-user-repository.port';
 import { User } from '../../domain/entities/user.entity';
-import { UserRepository } from '../../domain/repositories/user.repository';
-import { Injectable } from '@nestjs/common';
+import {
+  USER_REPOSITORY,
+  type UserRepository,
+} from '../../domain/repositories/user.repository';
+import { Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserRepositoryAdminAdapter implements AdminUserRepositoryPort {
-  constructor(private readonly _userRepo: UserRepository) {}
+  constructor(
+    @Inject(USER_REPOSITORY)
+    private readonly _userRepo: UserRepository,
+  ) {}
 
   countDocument(): Promise<number> {
     return this._userRepo.countDocument();

@@ -1,5 +1,5 @@
 import { FREELANCER_USER_REPOSITORY } from 'src/modules/freelancer/application/ports/freelancer.token';
-import { UserRepository } from '../../domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../../domain/repositories/user.repository';
 import { UserRepositoryMongo } from '../presistence/mongo/user.repository.mongo';
 import { UserRepositoryFreelancerAdapter } from '../adapters/user-repository-freelancer.adapter';
 import { CLIENT_USER_REPOSITORY } from 'src/modules/client/application/ports/client.token';
@@ -7,7 +7,7 @@ import { UserRepositoryClientAdapter } from '../adapters/user-repository-client.
 
 export const userProviders = [
   {
-    provide: UserRepository,
+    provide: USER_REPOSITORY,
     useClass: UserRepositoryMongo,
   },
   {
