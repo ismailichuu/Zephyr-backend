@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateProfileBasicDto {
+export class UpdateProfileBasicRequestDto {
   @IsOptional()
   @IsString()
   name?: string;
@@ -18,7 +18,7 @@ export class UpdateProfileBasicDto {
   imageUrl?: string;
 }
 
-export class UpdateProfileBioDto {
+export class UpdateProfileBioRequestDto {
   @IsString()
   bio: string;
 }

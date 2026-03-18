@@ -1,4 +1,3 @@
-import { UpdateProfileBasicDto } from '../../presentation/dtos/update-profile.dtos';
 import { Request } from 'express';
 import { User } from 'src/modules/user/domain/entities/user.entity';
 import { ClientProfile } from '../../domain/entities/client-profile.entity';
@@ -10,14 +9,15 @@ import {
 } from '../ports/client.token';
 import type { FileValidator } from '../ports/file-validator.port';
 import type { UploadService } from '../ports/upload.service';
-import { TokenPayload } from 'src/modules/auth/application/types/tokenPayload.type';
 import type { ClientUserRepository } from '../ports/client-user.respository.port';
 import { NOT_FOUND } from 'src/modules/auth/application/constants/error-message.const';
 import type { ClientProfileRepository } from '../../domain/repositories/client-profile.repository';
-import { PROFILE_UPDATED_CLIENT } from '../constants/success-message.consts';
 import { CLIENT_PROFILE_REPOSITORY } from '../../domain/repositories/repository.token';
+import { UpdateProfileBasicInput } from '../types/update-profile-basic.input';
+import { IUpdateProfileBasicUsecase } from './update-profile-basic.usecase.interface';
+import { UpdatePrfoleBasicOutput } from '../types/update-profile-basic.output';
 
-export class UpdateProfileBasicUsecase {
+export class UpdateProfileBasicUsecase implements IUpdateProfileBasicUsecase {
   constructor(
     @Inject(FILE_VALIDATOR_PORT)
     private readonly _fileValidator: FileValidator,
@@ -30,29 +30,25 @@ export class UpdateProfileBasicUsecase {
   ) {}
 
   async execute(
-    req: Request,
-    basicDetails: UpdateProfileBasicDto,
-    file?: Express.Multer.File,
-  ) {
-    const userPayload = req.user as TokenPayload;
-
-    const { name, ...profileDetails } = basicDetails;
+    dto: UpdateProfileBasicInput,
+  ): Promise<UpdatePrfoleBasicOutput> {
+    const { name, ...profileDetails } = dto;
 
     let updatedUser: User | null = null;
     let updatedProfile: ClientProfile | null = null;
 
-    if (file) {
-      this._fileValidator.validate(file);
+    if (dto.file) {
+      this._fileValidator.validate(dto.file);
       const upload = await this._uploadService.uploadImage(
-        file,
-        userPayload.userId,
+        dto.file,
+        dto.userId,
       );
 
       profileDetails.imageUrl = upload.url;
     }
 
     if (name) {
-      updatedUser = await this._userRepo.update(userPayload.userId, {
+      updatedUser = await this._userRepo.update(dto.userId, {
         name,
       });
 
@@ -63,7 +59,7 @@ export class UpdateProfileBasicUsecase {
 
     if (Object.keys(profileDetails).length > 0) {
       updatedProfile = await this._clientProfileRepo.update(
-        userPayload.userId,
+        dto.userId,
         profileDetails,
       );
 
@@ -73,17 +69,13 @@ export class UpdateProfileBasicUsecase {
     }
 
     return {
-      message: PROFILE_UPDATED_CLIENT,
-      freelancer: {
-        user: {
-          name: updatedUser ? updatedUser.name : name,
-        },
-        profile: {
-          imageUrl: updatedProfile?.imageUrl ?? profileDetails.imageUrl,
-          location: updatedProfile?.location ?? profileDetails.location,
-          companyName:
-            updatedProfile?.companyName ?? profileDetails.companyName,
-        },
+      user: {
+        name: updatedUser ? updatedUser.name : name,
+      },
+      profile: {
+        imageUrl: updatedProfile?.imageUrl ?? profileDetails.imageUrl,
+        location: updatedProfile?.location ?? profileDetails.location,
+        companyName: updatedProfile?.companyName ?? profileDetails.companyName,
       },
     };
   }

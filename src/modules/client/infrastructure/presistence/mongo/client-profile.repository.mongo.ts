@@ -4,6 +4,7 @@ import { ClientProfileRepository } from 'src/modules/client/domain/repositories/
 import { ClientProfileDocument } from './client-profile.schema';
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { ClientPresistenceMappers } from './client-presistence.mappers';
 
 @Injectable()
 export class ClientProfileRepositoryMongo implements ClientProfileRepository {
@@ -12,52 +13,32 @@ export class ClientProfileRepositoryMongo implements ClientProfileRepository {
     private readonly _clientProfileModel: Model<ClientProfileDocument>,
   ) {}
 
-  private _toDomain(clientProfileDoc: ClientProfileDocument) {
-    return ClientProfile.create({
-      id: clientProfileDoc._id.toString() ?? null,
-      userId: clientProfileDoc.userId,
-      imageUrl: clientProfileDoc.imageUrl,
-      bio: clientProfileDoc.bio,
-      companyName: clientProfileDoc.companyName,
-      location: clientProfileDoc.location,
-      updatedAt: clientProfileDoc.updatedAt ?? null,
-    });
-  }
-
-  private _toPersistence(
-    clientProfile: ClientProfile,
-  ): Partial<ClientProfileDocument> {
-    return {
-      userId: clientProfile.userId,
-      imageUrl: clientProfile.imageUrl,
-      bio: clientProfile.bio,
-      location: clientProfile.location,
-      companyName: clientProfile.companyName,
-    };
-  }
-
   async findById(id: string): Promise<ClientProfile | null> {
     const clientProfile = await this._clientProfileModel
       .findOne({ userId: id })
       .exec();
 
-    return clientProfile ? this._toDomain(clientProfile) : null;
+    return clientProfile
+      ? ClientPresistenceMappers.toDomain(clientProfile)
+      : null;
   }
 
   async findAll(): Promise<ClientProfile[]> {
     const profiles = await this._clientProfileModel.find().exec();
 
-    return profiles.map((profile) => this._toDomain(profile));
+    return profiles.map((profile) =>
+      ClientPresistenceMappers.toDomain(profile),
+    );
   }
 
   async create(entity: ClientProfile): Promise<ClientProfile> {
     const createdProfile = new this._clientProfileModel(
-      this._toPersistence(entity),
+      ClientPresistenceMappers.toPersistence(entity),
     );
 
     const savedProfile = await createdProfile.save();
 
-    return this._toDomain(savedProfile);
+    return ClientPresistenceMappers.toDomain(savedProfile);
   }
 
   async update(
@@ -70,7 +51,9 @@ export class ClientProfileRepositoryMongo implements ClientProfileRepository {
       { returnDocument: 'after' },
     );
 
-    return updatedProfile ? this._toDomain(updatedProfile) : null;
+    return updatedProfile
+      ? ClientPresistenceMappers.toDomain(updatedProfile)
+      : null;
   }
 
   countDocument(): Promise<number> {

@@ -8,6 +8,14 @@ import {
 import { clientProviders } from './infrastructure/di/client.provider';
 import { UserModule } from '../user/user.module';
 import { FreelancerModule } from '../freelancer/freelancer.module';
+import {
+  GET_PROFILE_USECASE,
+  UPDATE_PROFILE_BASIC_USECASE,
+  UPDATE_PROFILE_BIO_USECASE,
+} from './application/usecases/usecase.tokens';
+import { GetProfileUsecase } from './application/usecases/get-profile.usecase';
+import { UpdateProfileBasicUsecase } from './application/usecases/update-profile-basic.usecase';
+import { UpdateProfileBioUsecase } from './application/usecases/update-profile-bio.usecase';
 
 @Module({
   imports: [
@@ -20,7 +28,22 @@ import { FreelancerModule } from '../freelancer/freelancer.module';
     UserModule,
     FreelancerModule,
   ],
-  providers: [...clientProviders],
+  providers: [
+    //usecases
+    {
+      provide: GET_PROFILE_USECASE,
+      useClass: GetProfileUsecase,
+    },
+    {
+      provide: UPDATE_PROFILE_BASIC_USECASE,
+      useClass: UpdateProfileBasicUsecase,
+    },
+    {
+      provide: UPDATE_PROFILE_BIO_USECASE,
+      useClass: UpdateProfileBioUsecase,
+    },
+    ...clientProviders,
+  ],
   controllers: [ClientController],
 })
 export class ClientModule {}
