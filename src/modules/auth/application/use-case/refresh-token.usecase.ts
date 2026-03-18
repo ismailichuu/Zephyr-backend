@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import type { TokenService } from '../ports/token.service.port';
 import { TOKEN_SERVICE } from '../ports/auth.token';
 import { Request, Response } from 'express';
@@ -14,8 +19,9 @@ export class RefreshTokenUseCase {
 
   async execute(req: Request, res: Response) {
     const oldRefreshToken = req?.cookies?.refreshToken as string | undefined;
+    console.log('refresh:', oldRefreshToken);
 
-    if (!oldRefreshToken) throw new UnauthorizedException(TOKEN_EXPIRED);
+    if (!oldRefreshToken) throw new BadRequestException(TOKEN_EXPIRED);
 
     const payload =
       await this._tokenService.verifyRefreshToken(oldRefreshToken);
@@ -35,7 +41,7 @@ export class RefreshTokenUseCase {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      path: '/auth/refresh',
+      path: '/',
       maxAge: 24 * 60 * 60 * 1000,
     });
 

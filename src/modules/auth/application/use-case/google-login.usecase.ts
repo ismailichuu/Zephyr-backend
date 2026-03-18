@@ -78,7 +78,7 @@ export class GoogleLoginUseCase {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      path: '/auth/refresh',
+      path: '/',
       maxAge: 24 * 60 * 60 * 1000,
     });
 
