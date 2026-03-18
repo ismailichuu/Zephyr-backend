@@ -50,13 +50,8 @@ export const authProviders = [
     provide: GOOGLE_AUTH_GATEWAY,
     useClass: GoogleAuthService,
   },
-  {
-    provide: EMAIL_SERVICE,
-    useFactory: () => {
-      const config = loadEmailConfig();
-      return new NodemailerEmailService(config);
-    },
-  },
+
+  // create JwtTokenService properly
   {
     provide: TOKEN_SERVICE,
     useFactory: (jwt: JwtService) => {
@@ -65,9 +60,16 @@ export const authProviders = [
     },
     inject: [JwtService],
   },
-  //strategy
+  {
+    provide: EMAIL_SERVICE,
+    useFactory: () => {
+      const config = loadEmailConfig();
+      return new NodemailerEmailService(config);
+    },
+  },
+
   JwtStrategy,
-  //usecases
+
   ChangePasswordUsecase,
   ForgotPasswordUsecase,
   GoogleLoginUseCase,

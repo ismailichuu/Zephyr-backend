@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { FreelancerModule } from './modules/freelancer/freelancer.module';
 import { ClientModule } from './modules/client/client.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { JobModule } from './modules/job/job.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AdminModule } from './modules/admin/admin.module';
       ],
     }),
     AdminModule,
+    JobModule,
   ],
 })
 export class AppModule {}

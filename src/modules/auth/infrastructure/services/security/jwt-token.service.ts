@@ -21,7 +21,7 @@ export class JwtTokenService implements TokenService {
   async signResetToken(payload: object): Promise<string> {
     return this.jwt.signAsync(payload, {
       secret: this.config.resetSecret,
-      expiresIn: this.config.accessExpiry,
+      expiresIn: this.config.resetExpiry,
     });
   }
   async verifyResetToken(token: string): Promise<ResetTokenPayload> {
