@@ -2,7 +2,6 @@ import type { AuthUserRepository } from '../ports/auth-user-repository.port';
 import type { GoogleAuthPort } from '../ports/google-auth.port';
 import type { IdGenerator } from '../ports/id-generator.port';
 import type { TokenService } from '../ports/token.service.port';
-import { Response } from 'express';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   AUTH_USER_REPOSITORY,
@@ -13,9 +12,12 @@ import {
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
 import { User } from 'src/modules/user/domain/entities/user.entity';
 import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
+import { GoogleLoginInput } from '../types/google-login.input';
+import { GoogleLoginOutput } from '../types/google-login.output';
+import { IGoogleLoginUsecase } from './google-login.usecase.interface';
 
 @Injectable()
-export class GoogleLoginUseCase {
+export class GoogleLoginUseCase implements IGoogleLoginUsecase {
   constructor(
     @Inject(GOOGLE_AUTH_GATEWAY)
     private readonly _googleAuthService: GoogleAuthPort,
@@ -27,7 +29,7 @@ export class GoogleLoginUseCase {
     private readonly _tokenService: TokenService,
   ) {}
 
-  async execute(code: string, role: UserRole, res: Response) {
+  async execute({ code, role }: GoogleLoginInput): Promise<GoogleLoginOutput> {
     const allowedRoles = [UserRole.CLIENT, UserRole.FREELANCER];
 
     if (!allowedRoles.includes(role)) {
@@ -59,9 +61,10 @@ export class GoogleLoginUseCase {
       await this._userRepo.create(user);
     } else {
       if (user.role !== role) {
-        return res.redirect(
-          `${process.env.CLIENT_URL}/signin?authErrorCode=ROLE_MISMATCH`,
-        );
+        return {
+          url: `${process.env.CLIENT_URL}/signin?authErrorCode=ROLE_MISMATCH`,
+          isError: true,
+        };
       }
     }
 
@@ -74,22 +77,11 @@ export class GoogleLoginUseCase {
 
     const refreshToken = await this._tokenService.signRefreshToken(payload);
 
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
-
-    return res.redirect(`${process.env.CLIENT_URL + user?.role.toLowerCase()}`);
+    return {
+      url: `${process.env.CLIENT_URL + user?.role.toLowerCase()}`,
+      isError: false,
+      accessToken,
+      refreshToken,
+    };
   }
 }

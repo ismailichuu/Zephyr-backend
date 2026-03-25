@@ -19,10 +19,12 @@ import { User } from 'src/modules/user/domain/entities/user.entity';
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
 import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
 import { Role } from '../../presentation/dto/signup.dto';
-import { USER_ } from '../constants/success-message.const';
+import { SignupInput } from '../types/signup.input';
+import { ISignupUsecase } from './signup.usecase.interface';
+import { SignupOutput } from '../types/signup.output';
 
 @Injectable()
-export class SignupUseCase {
+export class SignupUseCase implements ISignupUsecase {
   constructor(
     @Inject(AUTH_USER_REPOSITORY)
     private readonly _authRepo: AuthUserRepository,
@@ -36,17 +38,17 @@ export class SignupUseCase {
     private readonly _idGenerator: IdGenerator,
   ) {}
 
-  async execute(name: string, email: string, password: string, role: Role) {
-    const isAlready = await this._authRepo.findByEmail(email);
+  async execute(dto: SignupInput): Promise<SignupOutput> {
+    const isAlready = await this._authRepo.findByEmail(dto.email);
     if (isAlready && isAlready.isOtpVerified)
       throw new BadRequestException(ALREADY_REGISTERED);
-    const hashedPassword = await this._passwordService.hash(password);
-    const userId = this._idGenerator.generateForRole(role);
+    const hashedPassword = await this._passwordService.hash(dto.password);
+    const userId = this._idGenerator.generateForRole(dto.role);
     const userDetails = User.create({
-      name,
-      email,
+      name: dto.name,
+      email: dto.email,
       password: hashedPassword,
-      role: role as unknown as UserRole,
+      role: dto.role as unknown as UserRole,
       userId,
       isPremium: false,
       isOtpVerified: false,
@@ -54,7 +56,7 @@ export class SignupUseCase {
       status: UserStatus.ACTIVE,
       provider: 'NORMAL',
       joinedAt: null,
-      isAdminApproved: role === Role.FREELANCER ? true : false,
+      isAdminApproved: dto.role === Role.FREELANCER ? true : false,
     });
     let user: User | null;
     if (isAlready && !isAlready?.isOtpVerified) {
@@ -71,9 +73,6 @@ export class SignupUseCase {
     await this._emailService.sendEmailSignup(user.email, otp);
 
     return {
-      message: USER_,
-      readyToVeify: true,
-      emailSent: true,
       otpSessionId: sessionId,
     };
   }

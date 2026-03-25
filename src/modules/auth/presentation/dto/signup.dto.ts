@@ -5,7 +5,7 @@ export enum Role {
   CLIENT = 'CLIENT',
 }
 
-export class SignUpDto {
+export class SignUpRequestDto {
   @IsString()
   name: string;
 
@@ -18,6 +18,11 @@ export class SignUpDto {
 
   @IsEnum(Role)
   role: Role;
+}
+
+export class SignUpResponseDto {
+  otpSessionId: string;
+  readyToVerify: boolean;
 }
 
 export class GoogleSignupDto {

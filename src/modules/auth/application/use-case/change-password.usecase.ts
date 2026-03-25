@@ -8,11 +8,11 @@ import {
   PASSWORD_SERVICE,
   TOKEN_SERVICE,
 } from '../ports/auth.token';
-import { Request, Response } from 'express';
-import { PASSWORD_RESET_SUCCESS } from '../constants/success-message.const';
+import { ChangePasswordInput } from '../types/change-password.input';
+import { IChangePasswordUsecase } from './change-password.uscase.interface';
 
 @Injectable()
-export class ChangePasswordUsecase {
+export class ChangePasswordUsecase implements IChangePasswordUsecase {
   constructor(
     @Inject(AUTH_USER_REPOSITORY)
     private readonly _userRepo: AuthUserRepository,
@@ -22,8 +22,7 @@ export class ChangePasswordUsecase {
     private readonly _tokenService: TokenService,
   ) {}
 
-  async execute(req: Request, res: Response, password: string) {
-    const token = req.cookies.resetToken as string | undefined;
+  async execute({ token, password }: ChangePasswordInput): Promise<void> {
     if (!token) throw new UnauthorizedException(SESSION_EXPIRED);
 
     const payload = await this._tokenService.verifyResetToken(token);
@@ -35,14 +34,5 @@ export class ChangePasswordUsecase {
     const hashedPassword = await this._passwordService.hash(password);
 
     await this._userRepo.update(payload.userId, { password: hashedPassword });
-
-    res.clearCookie('resetToken', {
-      path: '/auth/change-password',
-    });
-
-    return {
-      message: PASSWORD_RESET_SUCCESS,
-      readyToLogin: true,
-    };
   }
 }

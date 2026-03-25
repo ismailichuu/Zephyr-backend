@@ -1,6 +1,5 @@
 export const LOGIN_SUCCESS = 'Login Successful';
 export const OTP_VERIFICATION_SUCCESS = 'verification successful';
-export const OTP_VERIFICATION_FORGOT_SUCCESS = 'otp verified successfully';
 export const OTP_RESEND_SUCCESS = 'Otp Resend Successful';
 export const LOGOUT_SUCCESS = 'Logout Successful';
 export const PASSWORD_CHANGE_SUCCESS = 'Password Change Successful';

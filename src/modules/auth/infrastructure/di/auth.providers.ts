@@ -21,11 +21,9 @@ import { ChangePasswordUsecase } from '../../application/use-case/change-passwor
 import { ForgotPasswordUsecase } from '../../application/use-case/forgot-password.usecase';
 import { GoogleLoginUseCase } from '../../application/use-case/google-login.usecase';
 import { LoginUseCase } from '../../application/use-case/login.usecase';
-import { OtpVerifyUsecase } from '../../application/use-case/otp-verify.usecase';
 import { RefreshTokenUseCase } from '../../application/use-case/refresh-token.usecase';
 import { ResendOtpUsecase } from '../../application/use-case/resend-otp.usecase';
 import { SignupUseCase } from '../../application/use-case/signup.usecase';
-import { LogoutUseCase } from '../../application/use-case/logout.usecase';
 import { AdminLoginUsecase } from '../../application/use-case/admin-login.usecase';
 import { JwtStrategy } from '../strategies/jwt.strategy';
 
@@ -69,15 +67,13 @@ export const authProviders = [
   },
 
   JwtStrategy,
-
+  //usecases
   ChangePasswordUsecase,
   ForgotPasswordUsecase,
   GoogleLoginUseCase,
   LoginUseCase,
-  OtpVerifyUsecase,
   RefreshTokenUseCase,
   ResendOtpUsecase,
   SignupUseCase,
-  LogoutUseCase,
   AdminLoginUsecase,
 ];

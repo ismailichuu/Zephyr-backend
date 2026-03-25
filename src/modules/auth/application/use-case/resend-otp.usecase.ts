@@ -2,10 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { EmailService } from '../ports/email.service.port';
 import type { OtpService } from '../ports/otp.service.port';
 import { EMAIL_SERVICE, OTP_SERVICE } from '../ports/auth.token';
-import { OTP_RESEND_SUCCESS } from '../constants/success-message.const';
+import { ResendOtpInput } from '../types/resend-otp.input';
+import { IResendOtpUsecase } from './resend-otp.usecase.interface';
 
 @Injectable()
-export class ResendOtpUsecase {
+export class ResendOtpUsecase implements IResendOtpUsecase {
   constructor(
     @Inject(OTP_SERVICE)
     private readonly _otpService: OtpService,
@@ -13,15 +14,9 @@ export class ResendOtpUsecase {
     private readonly _emailService: EmailService,
   ) {}
 
-  async execute(sessionId: string) {
-    const { otp, email } = await this._otpService.resend(sessionId);
+  async execute(dto: ResendOtpInput): Promise<void> {
+    const { otp, email } = await this._otpService.resend(dto.sessionId);
 
     await this._emailService.sendEmailSignup(email, otp);
-
-    return {
-      message: OTP_RESEND_SUCCESS,
-      emailSent: true,
-      readyToVerify: true,
-    };
   }
 }
