@@ -1,0 +1,3 @@
+export const ADMIN_ACTION_USECASE = Symbol('ADMIN_ACTION_USECASE');
+export const GET_ALL_USERS_USECASE = Symbol('GET_ALL_USERS');
+export const GET_USER_DETAILS_USECASE = Symbol('GET_USER_DETAILS');

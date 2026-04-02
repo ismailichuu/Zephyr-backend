@@ -4,26 +4,50 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Patch,
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { GetAllUsersUsecase } from '../application/use-case/get-all-users.usecase';
-import { GetAllUsersDto } from './dtos/get-all-users.dto';
-import { AdminActionDto } from './dtos/admin-action.dto';
-import { AdminActionUsecase } from '../application/use-case/admin-action.usecase';
-import { GetUserDetailsUsecase } from '../application/use-case/get-user-details.usecase';
-import { JwtGuard } from 'src/modules/auth/presentation/guards/jwt-auth.guard';
-import { RoleGuard } from 'src/modules/auth/presentation/guards/role.guard';
-import { Roles } from 'src/modules/auth/presentation/decorators/role.decorator';
+import {
+  GetAllUsersRequestDto,
+  GetAllUsersResponseDto,
+} from './dtos/get-all-users.dto';
+import {
+  AdminActionRequestDto,
+  AdminActionResponseDto,
+} from './dtos/admin-action.dto';
+import { JwtGuard } from 'src/common/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/common/guards/role.guard';
+import { Roles } from 'src/common/decarators/role.decorator';
+import { ResponseMessage } from 'src/common/decarators/success-message.decarator';
+import {
+  USER_FETCH_SUCCESS,
+  USER_UPDATE_SUCCESS,
+} from '../application/constants/success-message.const';
+import {
+  GetUserByIdRequestDto,
+  GetUserByIdResponseDto,
+} from './dtos/get-user-byid.dto';
+import type { IGetAllUsersUsecase } from '../application/use-case/interface/get-all-users.usecase.interface';
+import type { IAdminActionUsecase } from '../application/use-case/interface/admin-action.usecase.interface';
+import type { IGetUserDetialsUsecase } from '../application/use-case/interface/get-user-details.usecase.interface';
+import {
+  ADMIN_ACTION_USECASE,
+  GET_ALL_USERS_USECASE,
+  GET_USER_DETAILS_USECASE,
+} from '../application/use-case/token.usecase';
 
 @Controller('admin')
 export class AdminController {
   constructor(
-    private readonly _getAllUserUsecase: GetAllUsersUsecase,
-    private readonly _adminActionUsecase: AdminActionUsecase,
-    private readonly _getUserDetailsUsecase: GetUserDetailsUsecase,
+    @Inject(GET_ALL_USERS_USECASE)
+    private readonly _getAllUserUsecase: IGetAllUsersUsecase,
+    @Inject(ADMIN_ACTION_USECASE)
+    private readonly _adminActionUsecase: IAdminActionUsecase,
+    @Inject(GET_USER_DETAILS_USECASE)
+    private readonly _getUserDetailsUsecase: IGetUserDetialsUsecase,
   ) {}
 
   //* Admin routes for user management
@@ -31,12 +55,14 @@ export class AdminController {
   @Roles('ADMIN')
   @Get('user')
   @HttpCode(HttpStatus.OK)
-  getAllUsers(@Query() query: GetAllUsersDto) {
+  @ResponseMessage(USER_FETCH_SUCCESS)
+  getAllUsers(
+    @Query() query: GetAllUsersRequestDto,
+  ): Promise<GetAllUsersResponseDto> {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 10;
     const search = query.search || '';
-
-    return this._getAllUserUsecase.execute(page, limit, search);
+    return this._getAllUserUsecase.execute({ limit, page, search });
   }
 
   //? Admin actions: VERIFY, BLOCK, UNBLOCK
@@ -44,8 +70,11 @@ export class AdminController {
   @Roles('ADMIN')
   @Patch('/user')
   @HttpCode(HttpStatus.OK)
-  adminAction(@Body() dto: AdminActionDto) {
-    return this._adminActionUsecase.execute(dto.userId, dto.action);
+  @ResponseMessage(USER_UPDATE_SUCCESS)
+  adminAction(
+    @Body() dto: AdminActionRequestDto,
+  ): Promise<AdminActionResponseDto> {
+    return this._adminActionUsecase.execute(dto);
   }
 
   //? Get user details by ID
@@ -53,7 +82,10 @@ export class AdminController {
   @Roles('ADMIN')
   @Get('/user/:id')
   @HttpCode(HttpStatus.OK)
-  getUserById(@Param('id') id: string) {
-    return this._getUserDetailsUsecase.execute(id);
+  @ResponseMessage(USER_FETCH_SUCCESS)
+  getUserById(
+    @Param('id') dto: GetUserByIdRequestDto,
+  ): Promise<GetUserByIdResponseDto> {
+    return this._getUserDetailsUsecase.execute({ userId: dto.id });
   }
 }
