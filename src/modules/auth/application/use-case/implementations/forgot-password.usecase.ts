@@ -1,15 +1,15 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import type { OtpService } from '../ports/otp.service.port';
-import type { EmailService } from '../ports/email.service.port';
-import type { AuthUserRepository } from '../ports/auth-user-repository.port';
+import type { OtpService } from '../../ports/otp.service.port';
+import type { EmailService } from '../../ports/email.service.port';
+import type { AuthUserRepository } from '../../ports/auth-user-repository.port';
 import {
   AUTH_USER_REPOSITORY,
   EMAIL_SERVICE,
   OTP_SERVICE,
-} from '../ports/auth.token';
-import { NOT_REGISTERED } from '../constants/error-message.const';
-import { ForgotPasswordInput } from '../types/forgot-password.input';
-import { ForgotPasswordOutput } from '../types/forgot-password.output';
+} from '../../ports/auth.token';
+import { NOT_REGISTERED } from '../../constants/error-message.const';
+import { ForgotPasswordInput } from '../../types/forgot-password.input';
+import { ForgotPasswordOutput } from '../../types/forgot-password.output';
 import { IForgotPasswordUsecase } from './forgot-password.usecase.interface';
 
 @Injectable()

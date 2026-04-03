@@ -4,11 +4,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import type { TokenService } from '../ports/token.service.port';
-import { TOKEN_SERVICE } from '../ports/auth.token';
-import { TOKEN_EXPIRED } from '../constants/error-message.const';
-import { RefreshTokenInput } from '../types/refresh-token.input';
-import { RefreshTokenOutput } from '../types/refresh-token.output';
+import type { TokenService } from '../../ports/token.service.port';
+import { TOKEN_SERVICE } from '../../ports/auth.token';
+import { TOKEN_EXPIRED } from '../../constants/error-message.const';
+import { RefreshTokenInput } from '../../types/refresh-token.input';
+import { RefreshTokenOutput } from '../../types/refresh-token.output';
 import { IRefreshTokenUsecase } from './refresh-token.usecase.interface';
 
 @Injectable()

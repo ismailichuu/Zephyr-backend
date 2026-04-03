@@ -1,19 +1,19 @@
-import type { AuthUserRepository } from '../ports/auth-user-repository.port';
-import type { GoogleAuthPort } from '../ports/google-auth.port';
-import type { IdGenerator } from '../ports/id-generator.port';
-import type { TokenService } from '../ports/token.service.port';
+import type { AuthUserRepository } from '../../ports/auth-user-repository.port';
+import type { GoogleAuthPort } from '../../ports/google-auth.port';
+import type { IdGenerator } from '../../ports/id-generator.port';
+import type { TokenService } from '../../ports/token.service.port';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   AUTH_USER_REPOSITORY,
   GOOGLE_AUTH_GATEWAY,
   ID_GENERATOR,
   TOKEN_SERVICE,
-} from '../ports/auth.token';
+} from '../../ports/auth.token';
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
 import { User } from 'src/modules/user/domain/entities/user.entity';
 import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
-import { GoogleLoginInput } from '../types/google-login.input';
-import { GoogleLoginOutput } from '../types/google-login.output';
+import { GoogleLoginInput } from '../../types/google-login.input';
+import { GoogleLoginOutput } from '../../types/google-login.output';
 import { IGoogleLoginUsecase } from './google-login.usecase.interface';
 
 @Injectable()

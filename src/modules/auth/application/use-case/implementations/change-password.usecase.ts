@@ -1,15 +1,18 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { NOT_FOUND, SESSION_EXPIRED } from '../constants/error-message.const';
-import type { AuthUserRepository } from '../ports/auth-user-repository.port';
-import type { PasswordService } from '../ports/password.service.port';
-import type { TokenService } from '../ports/token.service.port';
+import { IChangePasswordUsecase } from '../interfaces/change-password.uscase.interface';
 import {
   AUTH_USER_REPOSITORY,
   PASSWORD_SERVICE,
   TOKEN_SERVICE,
-} from '../ports/auth.token';
-import { ChangePasswordInput } from '../types/change-password.input';
-import { IChangePasswordUsecase } from './change-password.uscase.interface';
+} from '../../ports/auth.token';
+import type { AuthUserRepository } from '../../ports/auth-user-repository.port';
+import type { PasswordService } from '../../ports/password.service.port';
+import type { TokenService } from '../../ports/token.service.port';
+import { ChangePasswordInput } from '../../types/change-password.input';
+import {
+  NOT_FOUND,
+  SESSION_EXPIRED,
+} from '../../constants/error-message.const';
 
 @Injectable()
 export class ChangePasswordUsecase implements IChangePasswordUsecase {

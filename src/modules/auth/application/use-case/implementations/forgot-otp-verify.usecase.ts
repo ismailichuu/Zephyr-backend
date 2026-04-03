@@ -1,15 +1,15 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import type { OtpService } from '../ports/otp.service.port';
-import type { AuthUserRepository } from '../ports/auth-user-repository.port';
-import type { TokenService } from '../ports/token.service.port';
+import type { OtpService } from '../../ports/otp.service.port';
+import type { AuthUserRepository } from '../../ports/auth-user-repository.port';
+import type { TokenService } from '../../ports/token.service.port';
 import {
   AUTH_USER_REPOSITORY,
   OTP_SERVICE,
   TOKEN_SERVICE,
-} from '../ports/auth.token';
-import { NOT_FOUND } from '../constants/error-message.const';
-import { ForgotOtpVerifyInput } from '../types/forgot-otp-verify.input';
-import { ForgotOtpVerifyOutput } from '../types/forgot-otp-verify.output';
+} from '../../ports/auth.token';
+import { NOT_FOUND } from '../../constants/error-message.const';
+import { ForgotOtpVerifyInput } from '../../types/forgot-otp-verify.input';
+import { ForgotOtpVerifyOutput } from '../../types/forgot-otp-verify.output';
 import { IForgotOtpVerifyUsecase } from './forgot-otp-verify.usecase.interface';
 
 @Injectable()

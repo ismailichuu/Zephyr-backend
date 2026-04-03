@@ -49,16 +49,16 @@ import {
   SIGNUP_OTP_VERIFY_USECASE,
   SIGNUP_USECASE,
 } from '../application/use-case/tokens.usecase';
-import type { ILoginUsecase } from '../application/use-case/login.usecase.interface';
-import type { ISignupUsecase } from '../application/use-case/signup.usecase.interface';
-import type { IRefreshTokenUsecase } from '../application/use-case/refresh-token.usecase.interface';
-import type { IForgotOtpVerifyUsecase } from '../application/use-case/forgot-otp-verify.usecase.interface';
-import type { ISignupOtpVerifyUsecase } from '../application/use-case/signup-otp-verify.usecase.interface';
-import type { IChangePasswordUsecase } from '../application/use-case/change-password.uscase.interface';
-import type { IForgotPasswordUsecase } from '../application/use-case/forgot-password.usecase.interface';
-import type { IResendOtpUsecase } from '../application/use-case/resend-otp.usecase.interface';
-import type { IAdminLoginUseCase } from '../application/use-case/admin-login.usecase.interface';
-import type { IGoogleLoginUsecase } from '../application/use-case/google-login.usecase.interface';
+import type { ILoginUsecase } from '../application/use-case/interfaces/login.usecase.interface';
+import type { ISignupUsecase } from '../application/use-case/interfaces/signup.usecase.interface';
+import type { IRefreshTokenUsecase } from '../application/use-case/interfaces/refresh-token.usecase.interface';
+import type { IForgotOtpVerifyUsecase } from '../application/use-case/interfaces/forgot-otp-verify.usecase.interface';
+import type { ISignupOtpVerifyUsecase } from '../application/use-case/interfaces/signup-otp-verify.usecase.interface';
+import type { IGoogleLoginUsecase } from '../application/use-case/interfaces/google-login.usecase.interface';
+import type { IForgotPasswordUsecase } from '../application/use-case/interfaces/forgot-password.usecase.interface';
+import type { IChangePasswordUsecase } from '../application/use-case/interfaces/change-password.uscase.interface';
+import type { IResendOtpUsecase } from '../application/use-case/interfaces/resend-otp.usecase.interface';
+import type { IAdminLoginUseCase } from '../application/use-case/interfaces/admin-login.usecase.interface';
 
 @Controller('auth')
 export class AuthController {

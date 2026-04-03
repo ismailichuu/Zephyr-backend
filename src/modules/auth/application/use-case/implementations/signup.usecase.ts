@@ -1,27 +1,27 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import type { PasswordService } from '../ports/password.service.port';
-import type { OtpService } from '../ports/otp.service.port';
-import type { EmailService } from '../ports/email.service.port';
-import type { AuthUserRepository } from '../ports/auth-user-repository.port';
-import type { IdGenerator } from '../ports/id-generator.port';
+import type { PasswordService } from '../../ports/password.service.port';
+import type { OtpService } from '../../ports/otp.service.port';
+import type { EmailService } from '../../ports/email.service.port';
+import type { AuthUserRepository } from '../../ports/auth-user-repository.port';
+import type { IdGenerator } from '../../ports/id-generator.port';
 import {
   ALREADY_REGISTERED,
   SIGNUP_AGAIN,
-} from '../constants/error-message.const';
+} from '../../constants/error-message.const';
 import {
   AUTH_USER_REPOSITORY,
   EMAIL_SERVICE,
   ID_GENERATOR,
   OTP_SERVICE,
   PASSWORD_SERVICE,
-} from '../ports/auth.token';
+} from '../../ports/auth.token';
 import { User } from 'src/modules/user/domain/entities/user.entity';
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
 import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
-import { Role } from '../../presentation/dto/signup.dto';
-import { SignupInput } from '../types/signup.input';
-import { ISignupUsecase } from './signup.usecase.interface';
-import { SignupOutput } from '../types/signup.output';
+import { Role } from '../../../presentation/dto/signup.dto';
+import { SignupInput } from '../../types/signup.input';
+import { ISignupUsecase } from '../interfaces/signup.usecase.interface';
+import { SignupOutput } from '../../types/signup.output';
 
 @Injectable()
 export class SignupUseCase implements ISignupUsecase {

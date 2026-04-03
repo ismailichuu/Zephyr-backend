@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { loadJwtModuleOptions } from './infrastructure/config/jwt-module.config';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { ForgotOtpVerifyUsecase } from './application/use-case/forgot-otp-verify.usecase';
+import { ForgotOtpVerifyUsecase } from './application/use-case/implementations/forgot-otp-verify.usecase';
 import {
   ADMIN_LOGIN_USECASE,
   CHANGE_PASSWORD_USECASE,
@@ -19,15 +19,15 @@ import {
   SIGNUP_OTP_VERIFY_USECASE,
   SIGNUP_USECASE,
 } from './application/use-case/tokens.usecase';
-import { SignupOtpVerifyUsecase } from './application/use-case/signup-otp-verify.usecase';
-import { LoginUseCase } from './application/use-case/login.usecase';
-import { SignupUseCase } from './application/use-case/signup.usecase';
-import { RefreshTokenUseCase } from './application/use-case/refresh-token.usecase';
-import { GoogleLoginUseCase } from './application/use-case/google-login.usecase';
-import { ForgotPasswordUsecase } from './application/use-case/forgot-password.usecase';
-import { ChangePasswordUsecase } from './application/use-case/change-password.usecase';
-import { ResendOtpUsecase } from './application/use-case/resend-otp.usecase';
-import { AdminLoginUsecase } from './application/use-case/admin-login.usecase';
+import { SignupOtpVerifyUsecase } from './application/use-case/implementations/signup-otp-verify.usecase';
+import { LoginUseCase } from './application/use-case/implementations/login.usecase';
+import { SignupUseCase } from './application/use-case/implementations/signup.usecase';
+import { RefreshTokenUseCase } from './application/use-case/implementations/refresh-token.usecase';
+import { GoogleLoginUseCase } from './application/use-case/implementations/google-login.usecase';
+import { ForgotPasswordUsecase } from './application/use-case/implementations/forgot-password.usecase';
+import { ResendOtpUsecase } from './application/use-case/implementations/resend-otp.usecase';
+import { AdminLoginUsecase } from './application/use-case/implementations/admin-login.usecase';
+import { ChangePasswordUsecase } from './application/use-case/implementations/change-password.usecase';
 
 @Module({
   imports: [

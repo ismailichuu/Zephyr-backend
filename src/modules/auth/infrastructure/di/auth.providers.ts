@@ -17,14 +17,6 @@ import {
 } from '../../application/ports/auth.token';
 import { UserRepositoryAuthAdapter } from 'src/modules/user/infrastructure/adapters/user-repository-auth.adapter';
 import { CryptoIdGenerator } from 'src/modules/user/infrastructure/utils/id-generator.utility';
-import { ChangePasswordUsecase } from '../../application/use-case/change-password.usecase';
-import { ForgotPasswordUsecase } from '../../application/use-case/forgot-password.usecase';
-import { GoogleLoginUseCase } from '../../application/use-case/google-login.usecase';
-import { LoginUseCase } from '../../application/use-case/login.usecase';
-import { RefreshTokenUseCase } from '../../application/use-case/refresh-token.usecase';
-import { ResendOtpUsecase } from '../../application/use-case/resend-otp.usecase';
-import { SignupUseCase } from '../../application/use-case/signup.usecase';
-import { AdminLoginUsecase } from '../../application/use-case/admin-login.usecase';
 import { JwtStrategy } from '../strategies/jwt.strategy';
 
 export const authProviders = [
@@ -67,13 +59,4 @@ export const authProviders = [
   },
 
   JwtStrategy,
-  //usecases
-  ChangePasswordUsecase,
-  ForgotPasswordUsecase,
-  GoogleLoginUseCase,
-  LoginUseCase,
-  RefreshTokenUseCase,
-  ResendOtpUsecase,
-  SignupUseCase,
-  AdminLoginUsecase,
 ];

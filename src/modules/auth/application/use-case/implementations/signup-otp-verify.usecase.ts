@@ -3,13 +3,13 @@ import {
   AUTH_USER_REPOSITORY,
   OTP_SERVICE,
   TOKEN_SERVICE,
-} from '../ports/auth.token';
-import type { OtpService } from '../ports/otp.service.port';
-import type { AuthUserRepository } from '../ports/auth-user-repository.port';
-import type { TokenService } from '../ports/token.service.port';
-import { NOT_FOUND } from '../constants/error-message.const';
-import { SignupOtpVerifyInput } from '../types/signup-otp-verify.input';
-import { SignupOtpVerifyOutput } from '../types/signup-otp-verify.output';
+} from '../../ports/auth.token';
+import type { OtpService } from '../../ports/otp.service.port';
+import type { AuthUserRepository } from '../../ports/auth-user-repository.port';
+import type { TokenService } from '../../ports/token.service.port';
+import { NOT_FOUND } from '../../constants/error-message.const';
+import { SignupOtpVerifyInput } from '../../types/signup-otp-verify.input';
+import { SignupOtpVerifyOutput } from '../../types/signup-otp-verify.output';
 import { ISignupOtpVerifyUsecase } from './signup-otp-verify.usecase.interface';
 
 @Injectable()
