@@ -1,13 +1,13 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import type { ClientProfileRepository } from '../../domain/repositories/client-profile.repository';
-import type { ClientUserRepository } from '../ports/client-user.respository.port';
-import { CLIENT_USER_REPOSITORY } from '../ports/client.token';
+import type { ClientProfileRepository } from '../../../domain/repositories/client-profile.repository';
+import type { ClientUserRepository } from '../../ports/client-user.respository.port';
+import { CLIENT_USER_REPOSITORY } from '../../ports/client.token';
 import { NOT_FOUND } from 'src/modules/auth/application/constants/error-message.const';
-import { ClientProfile } from '../../domain/entities/client-profile.entity';
-import { CLIENT_PROFILE_REPOSITORY } from '../../domain/repositories/repository.token';
-import { GetProfileInput } from '../types/get-profile.input';
-import { IGetProfileUsecase } from './get-profie.usecase.interface';
-import { GetProfileOutput } from '../types/get-profile.output';
+import { ClientProfile } from '../../../domain/entities/client-profile.entity';
+import { CLIENT_PROFILE_REPOSITORY } from '../../../domain/repositories/repository.token';
+import { GetProfileInput } from '../../types/get-profile.input';
+import { GetProfileOutput } from '../../types/get-profile.output';
+import { IGetProfileUsecase } from '../interfaces/get-profie.usecase.interface';
 
 @Injectable()
 export class GetProfileUsecase implements IGetProfileUsecase {

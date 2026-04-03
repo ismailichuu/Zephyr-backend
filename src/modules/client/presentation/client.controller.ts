@@ -30,14 +30,14 @@ import {
 } from './dtos/update-profile.response.dto';
 import { ResponseMessage } from 'src/common/decarators/success-message.decarator';
 import { Roles } from 'src/common/decarators/role.decorator';
-import type { IGetProfileUsecase } from '../application/usecases/get-profie.usecase.interface';
-import type { IUpdateProfileBasicUsecase } from '../application/usecases/update-profile-basic.usecase.interface';
-import type { IUpdateProfileBioUsecase } from '../application/usecases/update-profile-bio.usecase.interface';
 import {
   GET_PROFILE_USECASE,
   UPDATE_PROFILE_BASIC_USECASE,
   UPDATE_PROFILE_BIO_USECASE,
 } from '../application/usecases/usecase.tokens';
+import type { IGetProfileUsecase } from '../application/usecases/interfaces/get-profie.usecase.interface';
+import type { IUpdateProfileBasicUsecase } from '../application/usecases/interfaces/update-profile-basic.usecase.interface';
+import type { IUpdateProfileBioUsecase } from '../application/usecases/interfaces/update-profile-bio.usecase.interface';
 
 @Controller('client')
 export class ClientController {

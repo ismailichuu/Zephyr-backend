@@ -13,9 +13,9 @@ import {
   UPDATE_PROFILE_BASIC_USECASE,
   UPDATE_PROFILE_BIO_USECASE,
 } from './application/usecases/usecase.tokens';
-import { GetProfileUsecase } from './application/usecases/get-profile.usecase';
-import { UpdateProfileBasicUsecase } from './application/usecases/update-profile-basic.usecase';
-import { UpdateProfileBioUsecase } from './application/usecases/update-profile-bio.usecase';
+import { GetProfileUsecase } from './application/usecases/implementations/get-profile.usecase';
+import { UpdateProfileBasicUsecase } from './application/usecases/implementations/update-profile-basic.usecase';
+import { UpdateProfileBioUsecase } from './application/usecases/implementations/update-profile-bio.usecase';
 
 @Module({
   imports: [

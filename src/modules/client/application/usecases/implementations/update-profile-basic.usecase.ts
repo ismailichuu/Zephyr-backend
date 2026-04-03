@@ -1,21 +1,21 @@
 import { Request } from 'express';
 import { User } from 'src/modules/user/domain/entities/user.entity';
-import { ClientProfile } from '../../domain/entities/client-profile.entity';
+import { ClientProfile } from '../../../domain/entities/client-profile.entity';
 import { BadRequestException, Inject } from '@nestjs/common';
 import {
   CLIENT_USER_REPOSITORY,
   FILE_UPLOADER,
   FILE_VALIDATOR_PORT,
-} from '../ports/client.token';
-import type { FileValidator } from '../ports/file-validator.port';
-import type { UploadService } from '../ports/upload.service';
-import type { ClientUserRepository } from '../ports/client-user.respository.port';
+} from '../../ports/client.token';
+import type { FileValidator } from '../../ports/file-validator.port';
+import type { UploadService } from '../../ports/upload.service';
+import type { ClientUserRepository } from '../../ports/client-user.respository.port';
 import { NOT_FOUND } from 'src/modules/auth/application/constants/error-message.const';
-import type { ClientProfileRepository } from '../../domain/repositories/client-profile.repository';
-import { CLIENT_PROFILE_REPOSITORY } from '../../domain/repositories/repository.token';
-import { UpdateProfileBasicInput } from '../types/update-profile-basic.input';
-import { IUpdateProfileBasicUsecase } from './update-profile-basic.usecase.interface';
-import { UpdatePrfoleBasicOutput } from '../types/update-profile-basic.output';
+import type { ClientProfileRepository } from '../../../domain/repositories/client-profile.repository';
+import { CLIENT_PROFILE_REPOSITORY } from '../../../domain/repositories/repository.token';
+import { UpdateProfileBasicInput } from '../../types/update-profile-basic.input';
+import { UpdatePrfoleBasicOutput } from '../../types/update-profile-basic.output';
+import { IUpdateProfileBasicUsecase } from '../interfaces/update-profile-basic.usecase.interface';
 
 export class UpdateProfileBasicUsecase implements IUpdateProfileBasicUsecase {
   constructor(
