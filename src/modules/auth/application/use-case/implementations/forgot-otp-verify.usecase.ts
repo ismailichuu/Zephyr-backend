@@ -10,7 +10,7 @@ import {
 import { NOT_FOUND } from '../../constants/error-message.const';
 import { ForgotOtpVerifyInput } from '../../types/forgot-otp-verify.input';
 import { ForgotOtpVerifyOutput } from '../../types/forgot-otp-verify.output';
-import { IForgotOtpVerifyUsecase } from './forgot-otp-verify.usecase.interface';
+import { IForgotOtpVerifyUsecase } from '../interfaces/forgot-otp-verify.usecase.interface';
 
 @Injectable()
 export class ForgotOtpVerifyUsecase implements IForgotOtpVerifyUsecase {

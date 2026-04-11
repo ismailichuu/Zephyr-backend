@@ -10,7 +10,7 @@ import type { TokenService } from '../../ports/token.service.port';
 import { NOT_FOUND } from '../../constants/error-message.const';
 import { SignupOtpVerifyInput } from '../../types/signup-otp-verify.input';
 import { SignupOtpVerifyOutput } from '../../types/signup-otp-verify.output';
-import { ISignupOtpVerifyUsecase } from './signup-otp-verify.usecase.interface';
+import { ISignupOtpVerifyUsecase } from '../interfaces/signup-otp-verify.usecase.interface';
 
 @Injectable()
 export class SignupOtpVerifyUsecase implements ISignupOtpVerifyUsecase {

@@ -10,7 +10,7 @@ import {
 import { NOT_REGISTERED } from '../../constants/error-message.const';
 import { ForgotPasswordInput } from '../../types/forgot-password.input';
 import { ForgotPasswordOutput } from '../../types/forgot-password.output';
-import { IForgotPasswordUsecase } from './forgot-password.usecase.interface';
+import { IForgotPasswordUsecase } from '../interfaces/forgot-password.usecase.interface';
 
 @Injectable()
 export class ForgotPasswordUsecase implements IForgotPasswordUsecase {

@@ -9,13 +9,13 @@ enum otpType {
 export class VerifyOtpRequestDto {
   @IsString()
   @Length(6)
-  otp: string;
+  otp!: string;
 
   @IsString()
-  otpSessionId: string;
+  otpSessionId!: string;
 
   @IsEnum(otpType)
-  type: string;
+  type!: string;
 }
 
 export class VerifyOtpResponseDto {
@@ -25,28 +25,28 @@ export class VerifyOtpResponseDto {
 
 export class ForgotPasswordRequestDto {
   @IsEmail()
-  email: string;
+  email!: string;
 }
 
 export class ForgotPasswordResponseDto {
-  otpSessionId: string;
+  otpSessionId!: string;
 }
 
 export class ChangePasswordRequestDto {
   @IsString()
   @MinLength(7)
-  password: string;
+  password!: string;
 }
 
 export class ChangePasswordResponseDto {
-  readToLogin: boolean;
+  readToLogin!: boolean;
 }
 
 export class ResendOtpRequestDto {
   @IsString()
-  sessionId: string;
+  sessionId!: string;
 }
 
 export class ResendOtpResponseDto {
-  emailSent: boolean;
+  emailSent!: boolean;
 }

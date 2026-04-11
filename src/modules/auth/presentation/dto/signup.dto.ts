@@ -7,28 +7,28 @@ export enum Role {
 
 export class SignUpRequestDto {
   @IsString()
-  name: string;
+  name!: string;
 
   @IsEmail({}, { message: 'Invalid email' })
-  email: string;
+  email!: string;
 
   @IsString()
   @MinLength(7)
-  password: string;
+  password!: string;
 
   @IsEnum(Role)
-  role: Role;
+  role!: Role;
 }
 
 export class SignUpResponseDto {
-  otpSessionId: string;
-  readyToVerify: boolean;
+  otpSessionId!: string;
+  readyToVerify!: boolean;
 }
 
 export class GoogleSignupDto {
   @IsString()
-  idToken: string;
+  idToken!: string;
 
   @IsEnum(Role)
-  role: Role;
+  role!: Role;
 }

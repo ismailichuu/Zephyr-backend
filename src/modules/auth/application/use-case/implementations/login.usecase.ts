@@ -20,9 +20,9 @@ import {
 } from '../../ports/auth.token';
 import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
 import { UserRole } from 'src/modules/user/domain/enums/role.enum';
-import { ILoginUsecase } from './login.usecase.interface';
 import { LoginInput } from '../../types/login.input';
 import { LoginOutput } from '../../types/login.output';
+import { ILoginUsecase } from '../interfaces/login.usecase.interface';
 
 @Injectable()
 export class LoginUseCase implements ILoginUsecase {

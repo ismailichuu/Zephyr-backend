@@ -3,7 +3,7 @@ import type { EmailService } from '../../ports/email.service.port';
 import type { OtpService } from '../../ports/otp.service.port';
 import { EMAIL_SERVICE, OTP_SERVICE } from '../../ports/auth.token';
 import { ResendOtpInput } from '../../types/resend-otp.input';
-import { IResendOtpUsecase } from './resend-otp.usecase.interface';
+import { IResendOtpUsecase } from '../interfaces/resend-otp.usecase.interface';
 
 @Injectable()
 export class ResendOtpUsecase implements IResendOtpUsecase {

@@ -27,8 +27,6 @@ import {
 } from './dto/otp.dto';
 import type { GoogleAuthPort } from '../application/ports/google-auth.port';
 import { GOOGLE_AUTH_GATEWAY } from '../application/ports/auth.token';
-import { UserRole } from 'src/modules/user/domain/enums/role.enum';
-import { ResponseMessage } from 'src/common/decarators/success-message.decarator';
 import {
   FORGOT_PASSWORD_SUCCESS,
   LOGIN_SUCCESS,
@@ -59,6 +57,8 @@ import type { IForgotPasswordUsecase } from '../application/use-case/interfaces/
 import type { IChangePasswordUsecase } from '../application/use-case/interfaces/change-password.uscase.interface';
 import type { IResendOtpUsecase } from '../application/use-case/interfaces/resend-otp.usecase.interface';
 import type { IAdminLoginUseCase } from '../application/use-case/interfaces/admin-login.usecase.interface';
+import { ResponseMessage } from '../../../common/decarators/success-message.decarator';
+import { UserRole } from '../../user/domain/enums/role.enum';
 
 @Controller('auth')
 export class AuthController {

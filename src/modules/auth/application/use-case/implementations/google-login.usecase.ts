@@ -14,7 +14,7 @@ import { User } from 'src/modules/user/domain/entities/user.entity';
 import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
 import { GoogleLoginInput } from '../../types/google-login.input';
 import { GoogleLoginOutput } from '../../types/google-login.output';
-import { IGoogleLoginUsecase } from './google-login.usecase.interface';
+import { IGoogleLoginUsecase } from '../interfaces/google-login.usecase.interface';
 
 @Injectable()
 export class GoogleLoginUseCase implements IGoogleLoginUsecase {
