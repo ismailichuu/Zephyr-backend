@@ -14,7 +14,7 @@ import { NOT_FOUND } from 'src/modules/auth/application/constants/error-message.
 import type { ClientProfileRepository } from '../../../domain/repositories/client-profile.repository';
 import { CLIENT_PROFILE_REPOSITORY } from '../../../domain/repositories/repository.token';
 import { UpdateProfileBasicInput } from '../../types/update-profile-basic.input';
-import { UpdatePrfoleBasicOutput } from '../../types/update-profile-basic.output';
+import { UpdateProfileBasicOutput } from '../../types/update-profile-basic.output';
 import { IUpdateProfileBasicUsecase } from '../interfaces/update-profile-basic.usecase.interface';
 
 export class UpdateProfileBasicUsecase implements IUpdateProfileBasicUsecase {
@@ -31,7 +31,7 @@ export class UpdateProfileBasicUsecase implements IUpdateProfileBasicUsecase {
 
   async execute(
     dto: UpdateProfileBasicInput,
-  ): Promise<UpdatePrfoleBasicOutput> {
+  ): Promise<UpdateProfileBasicOutput> {
     const { name, ...profileDetails } = dto;
 
     let updatedUser: User | null = null;

@@ -20,5 +20,5 @@ export class UpdateProfileBasicRequestDto {
 
 export class UpdateProfileBioRequestDto {
   @IsString()
-  bio: string;
+  bio!: string;
 }

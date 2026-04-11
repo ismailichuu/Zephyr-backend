@@ -4,7 +4,7 @@ import { NOT_FOUND } from 'src/modules/auth/application/constants/error-message.
 import { CLIENT_PROFILE_REPOSITORY } from '../../../domain/repositories/repository.token';
 import { UpdateProfileBioInput } from '../../types/update-profile-bio.input';
 import { UpdateProfileBioOutput } from '../../types/update-profile-bio.output';
-import { IUpdateProfileBioUsecase } from './update-profile-bio.usecase.interface';
+import { IUpdateProfileBioUsecase } from '../interfaces/update-profile-bio.usecase.interface';
 
 @Injectable()
 export class UpdateProfileBioUsecase implements IUpdateProfileBioUsecase {

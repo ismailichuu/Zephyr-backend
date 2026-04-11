@@ -1,4 +1,4 @@
-export interface UpdatePrfoleBasicOutput {
+export interface UpdateProfileBasicOutput {
   user?: {
     name?: string;
   };

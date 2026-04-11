@@ -12,8 +12,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import { JwtGuard } from 'src/common/guards/jwt-auth.guard';
-import { RoleGuard } from 'src/common/guards/role.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   UpdateProfileBasicRequestDto,
@@ -28,8 +26,6 @@ import {
   UpdateProfileBasicResponseDto,
   UpdateProfileBioResponseDto,
 } from './dtos/update-profile.response.dto';
-import { ResponseMessage } from 'src/common/decarators/success-message.decarator';
-import { Roles } from 'src/common/decarators/role.decorator';
 import {
   GET_PROFILE_USECASE,
   UPDATE_PROFILE_BASIC_USECASE,
@@ -38,6 +34,10 @@ import {
 import type { IGetProfileUsecase } from '../application/usecases/interfaces/get-profie.usecase.interface';
 import type { IUpdateProfileBasicUsecase } from '../application/usecases/interfaces/update-profile-basic.usecase.interface';
 import type { IUpdateProfileBioUsecase } from '../application/usecases/interfaces/update-profile-bio.usecase.interface';
+import { RoleGuard } from '../../../common/guards/role.guard';
+import { JwtGuard } from '../../../common/guards/jwt-auth.guard';
+import { Roles } from '../../../common/decarators/role.decorator';
+import { ResponseMessage } from '../../../common/decarators/success-message.decarator';
 
 @Controller('client')
 export class ClientController {
