@@ -3,9 +3,9 @@ import { User } from 'src/modules/user/domain/entities/user.entity';
 
 export class GetUserByIdRequestDto {
   @IsString()
-  id: string;
+  id!: string;
 }
 
 export class GetUserByIdResponseDto {
-  user: Partial<User>;
+  user!: Partial<User>;
 }

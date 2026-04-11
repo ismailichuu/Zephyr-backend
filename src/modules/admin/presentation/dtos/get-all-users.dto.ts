@@ -16,7 +16,7 @@ export class GetAllUsersRequestDto {
 }
 
 export class GetAllUsersResponseDto {
-  users: Partial<User>[];
-  totalPages: number;
-  totalUsers: number;
+  users!: Partial<User>[];
+  totalPages!: number;
+  totalUsers!: number;
 }

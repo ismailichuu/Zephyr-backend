@@ -3,10 +3,10 @@ import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
 
 export class AdminActionRequestDto {
   @IsString()
-  userId: string;
+  userId!: string;
 
   @IsIn([...Object.values(UserStatus), 'VERIFY'])
-  action: UserStatus | 'VERIFY';
+  action!: UserStatus | 'VERIFY';
 }
 
 export class AdminActionResponseDto {

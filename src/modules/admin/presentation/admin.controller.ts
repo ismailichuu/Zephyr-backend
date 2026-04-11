@@ -18,10 +18,6 @@ import {
   AdminActionRequestDto,
   AdminActionResponseDto,
 } from './dtos/admin-action.dto';
-import { JwtGuard } from 'src/common/guards/jwt-auth.guard';
-import { RoleGuard } from 'src/common/guards/role.guard';
-import { Roles } from 'src/common/decarators/role.decorator';
-import { ResponseMessage } from 'src/common/decarators/success-message.decarator';
 import {
   USER_FETCH_SUCCESS,
   USER_UPDATE_SUCCESS,
@@ -38,6 +34,10 @@ import {
   GET_ALL_USERS_USECASE,
   GET_USER_DETAILS_USECASE,
 } from '../application/use-case/token.usecase';
+import { JwtGuard } from '../../../common/guards/jwt-auth.guard';
+import { RoleGuard } from '../../../common/guards/role.guard';
+import { Roles } from '../../../common/decarators/role.decorator';
+import { ResponseMessage } from '../../../common/decarators/success-message.decarator';
 
 @Controller('admin')
 export class AdminController {
