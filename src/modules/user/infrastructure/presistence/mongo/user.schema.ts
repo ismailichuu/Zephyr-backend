@@ -7,38 +7,37 @@ import { UserStatus } from 'src/modules/user/domain/enums/userStatus.enum';
 @Schema({ timestamps: true })
 export class UserDocument extends Document {
   @Prop({ required: true, unique: true, index: true })
-  userId: string;
+  userId!: string;
 
   @Prop({ required: true })
-  name: string;
+  name!: string;
 
   @Prop({ required: true, unique: true })
-  email: string;
+  email!: string;
 
   @Prop({ required: false })
-  password: string;
+  password!: string;
 
   @Prop({ required: true, enum: UserRole })
-  role: string;
+  role!: string;
 
   @Prop({ default: false })
-  isOtpVerified: boolean;
+  isOtpVerified!: boolean;
 
   @Prop({ enum: Providers, default: Providers.NORMAL })
-  provider: string;
+  provider!: string;
 
   @Prop({ default: false })
-  isPremium: boolean;
+  isPremium!: boolean;
 
   @Prop({ default: null })
-  subscriptionId: string;
+  subscriptionId!: string;
 
   @Prop({ enum: UserStatus, default: UserStatus.ACTIVE })
-  status: string;
+  status!: string;
 
   @Prop({ default: false })
-  isAdminApproved: boolean;
-
+  isAdminApproved!: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
