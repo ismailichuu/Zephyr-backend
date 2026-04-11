@@ -1,11 +1,11 @@
 import { FreelancerProfile } from 'src/modules/freelancer/domain/entities/freelancer-profile.entity';
-import { FreelancerProfileRepository } from 'src/modules/freelancer/domain/repositories/freelancer-profile.repository';
+import type { IFreelancerProfileRepository } from 'src/modules/freelancer/domain/repositories/freelancer-profile.repository';
 import { FreelancerProfileDocument } from './freelancer-profile.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Availability } from 'src/modules/freelancer/domain/enums/freelancer-availability.enum';
 
-export class FreelancerProfileRepositoryMongo implements FreelancerProfileRepository {
+export class FreelancerProfileRepositoryMongo implements IFreelancerProfileRepository {
   constructor(
     @InjectModel(FreelancerProfileDocument.name)
     private readonly _freelancerProfileModel: Model<FreelancerProfileDocument>,

@@ -1,36 +1,36 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Experience } from 'src/modules/freelancer/domain/entities/freelancer-profile.entity';
 import { Availability } from 'src/modules/freelancer/domain/enums/freelancer-availability.enum';
+import { Experience } from 'src/modules/freelancer/domain/types/experience.type';
 
 @Schema({ timestamps: true })
 export class FreelancerProfileDocument extends Document {
   @Prop({ required: true, unique: true })
-  userId: string;
+  userId!: string;
 
   @Prop({ type: String, required: false })
-  imageUrl: string | null;
+  imageUrl!: string | null;
 
   @Prop({ required: false })
-  jobCategory: string;
+  jobCategory!: string;
 
   @Prop({ required: false })
-  jobSubCategory: string;
+  jobSubCategory!: string;
 
   @Prop({ type: String, required: false, maxLength: 1000 })
-  bio: string | null;
+  bio!: string | null;
 
   @Prop({ enum: Availability, default: Availability.AVAILABLE })
-  availability: string;
+  availability!: string;
 
   @Prop({ type: String, required: false })
-  location: string | null;
+  location!: string | null;
 
   @Prop({ required: false })
-  experience: Experience[] | [];
+  experience!: Experience[] | [];
 
   @Prop({ type: String, required: false })
-  portfolioUrl: string | null;
+  portfolioUrl!: string | null;
 
   createdAt?: Date;
   updatedAt?: Date;

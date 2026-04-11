@@ -4,10 +4,10 @@ import { Document } from 'mongoose';
 @Schema({ timestamps: true })
 export class SkillDocument extends Document {
   @Prop({ required: true, unique: true })
-  name: string;
+  name!: string;
 
   @Prop({ required: true })
-  categories: string[];
+  categories!: string[];
 
   createdAt?: Date;
 }

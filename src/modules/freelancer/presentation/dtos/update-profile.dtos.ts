@@ -1,6 +1,8 @@
 import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { Experience } from '../../domain/types/experience.type';
+import { FreelancerProfile } from '../../domain/entities/freelancer-profile.entity';
 
-export class UpdateProfileBasicDto {
+export class UpdateProfileBasicRequestDto {
   @IsOptional()
   @IsString()
   name?: string;
@@ -22,29 +24,47 @@ export class UpdateProfileBasicDto {
   location?: string;
 }
 
-export class UpdateProfileBioDto {
+export class UpdateProfileBasicResponseDto {
+  freelancer!: {
+    user?: { name?: string | undefined } | undefined;
+    profile?: Partial<FreelancerProfile>;
+  };
+}
+export class UpdateProfileBioRequestDto {
   @IsOptional()
   @IsString()
   @MaxLength(1000)
   bio?: string;
 }
 
-export class UpdateProfilePortfolioDto {
+export class UpdateProfileBioResponseDto {
+  bio?: string | null;
+}
+
+export class UpdateProfilePortfolioRequestDto {
   @IsOptional()
   @IsString()
   portfolioUrl?: string;
 }
 
-export class AddExperienceProfileDto {
+export class UpdateProfilePortfolioResponseDto {
+  portfolioUrl?: string;
+}
+
+export class AddExperienceProfileRequestDto {
   @IsString()
-  title: string;
+  title!: string;
 
   @IsString()
-  company: string;
+  company!: string;
 
   @IsString()
-  startDate: Date;
+  startDate!: Date;
 
   @IsString()
-  endDate: Date;
+  endDate!: Date;
+}
+
+export class AddExperienceProfileResponseDto {
+  experience!: Experience[] | [];
 }

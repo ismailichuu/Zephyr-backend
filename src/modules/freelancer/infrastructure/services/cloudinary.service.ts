@@ -5,6 +5,7 @@ import {
   UploadService,
 } from '../../application/ports/upload.service';
 import { Injectable } from '@nestjs/common';
+import { normalizeError } from 'src/common/utils/error-normalizer.util';
 
 @Injectable()
 export class CloudinaryUploadService implements UploadService {
@@ -30,7 +31,7 @@ export class CloudinaryUploadService implements UploadService {
         },
         (error, result) => {
           if (error || !result) {
-            return reject(error);
+            return reject(normalizeError(error));
           }
 
           resolve({

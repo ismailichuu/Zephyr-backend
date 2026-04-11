@@ -1,12 +1,5 @@
 import { Availability } from '../enums/freelancer-availability.enum';
-
-export interface Experience {
-  title: string;
-  company: string;
-  startDate: Date;
-  endDate: Date;
-}
-
+import { Experience } from '../types/experience.type';
 export class FreelancerProfile {
   constructor(
     private _id: string | null,

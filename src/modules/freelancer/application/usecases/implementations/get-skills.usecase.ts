@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { SkillRepository } from '../../domain/repositories/skill.repository';
-import { SKILL_FETCH_SUCCESS } from '../constants/success-message.const';
-import { Skill } from '../../domain/entities/skill.entity';
+import { SkillRepository } from '../../../domain/repositories/skill.repository';
+import { Skill } from '../../../domain/entities/skill.entity';
+import { GetSkillsInput } from '../../types/get-skills.input';
+import { GetSkillsOutput } from '../../types/get-skills.output';
+import { IGetSkillsUsecase } from '../interfaces/get-skills.usecase.interface';
 
 @Injectable()
-export class GetSkillsUsecase {
+export class GetSkillsUsecase implements IGetSkillsUsecase {
   constructor(private readonly _skillRepo: SkillRepository) {}
 
-  async execute(category: string) {
+  async execute({ category }: GetSkillsInput): Promise<GetSkillsOutput> {
     const skillsDoc = await this._skillRepo.findByCategory(category);
     let skills:
       | {
@@ -29,8 +31,7 @@ export class GetSkillsUsecase {
     }
 
     return {
-      message: SKILL_FETCH_SUCCESS,
-      skills: skills ?? [],
+      skills: (skills as Skill[]) ?? [],
     };
   }
 }

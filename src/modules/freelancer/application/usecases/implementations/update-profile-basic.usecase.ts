@@ -1,39 +1,40 @@
-import { Request } from 'express';
-import { UpdateProfileBasicDto } from '../../presentation/dtos/update-profile.dtos';
-import type { FreelancerUserRepository } from '../ports/freelancer-user.repository.port';
-import { TokenPayload } from '../types/token-payload.type';
-import { BadRequestException, Inject } from '@nestjs/common';
+import type { FreelancerUserRepository } from '../../ports/freelancer-user.repository.port';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { NOT_FOUND } from 'src/modules/auth/application/constants/error-message.const';
-import { FreelancerProfileRepository } from '../../domain/repositories/freelancer-profile.repository';
+import type { IFreelancerProfileRepository } from '../../../domain/repositories/freelancer-profile.repository';
 import { User } from 'src/modules/user/domain/entities/user.entity';
-import { FreelancerProfile } from '../../domain/entities/freelancer-profile.entity';
+import { FreelancerProfile } from '../../../domain/entities/freelancer-profile.entity';
 import {
   FILE_VALIDATOR,
   FREELANCER_USER_REPOSITORY,
   UPLOAD_SERVICE,
-} from '../ports/freelancer.token';
-import { PROFILE_UPDATED } from '../constants/success-message.const';
-import type { FileValidator } from '../ports/file-validator.interface';
-import type { UploadService } from '../ports/upload.service';
+} from '../../ports/freelancer.token';
+import type { FileValidator } from '../../ports/file-validator.interface';
+import type { UploadService } from '../../ports/upload.service';
+import { UpdateProfileBasicInput } from '../../types/update-profile-basic.input';
+import { FREELANCER_PROFILE_REPOSITORY } from 'src/modules/freelancer/domain/repositories/token.repository';
+import { UpdateProfileBasicOutput } from '../../types/update-profile-basic.output';
+import { IUpdateProfileBasicUsecase } from '../interfaces/update-profile-basic.usecase.interface';
 
-export class UpdateProfileBasicUsecase {
+@Injectable()
+export class UpdateProfileBasicUsecase implements IUpdateProfileBasicUsecase {
   constructor(
     @Inject(FREELANCER_USER_REPOSITORY)
     private readonly _userRepo: FreelancerUserRepository,
-    private readonly _freelancerProfileRepo: FreelancerProfileRepository,
+    @Inject(FREELANCER_PROFILE_REPOSITORY)
+    private readonly _freelancerProfileRepo: IFreelancerProfileRepository,
     @Inject(FILE_VALIDATOR)
     private readonly _fileValidator: FileValidator,
     @Inject(UPLOAD_SERVICE)
     private readonly _uploadService: UploadService,
   ) {}
 
-  async execute(
-    req: Request,
-    basicDetails: UpdateProfileBasicDto,
-    file?: Express.Multer.File,
-  ) {
-    const userPayload = req.user as TokenPayload;
-
+  async execute({
+    basicDetails,
+    file,
+    userId,
+  }: UpdateProfileBasicInput): Promise<UpdateProfileBasicOutput> {
+    console.log(basicDetails);
     const { name, ...profileDetails } = basicDetails;
 
     let updatedUser: User | null = null;
@@ -41,16 +42,13 @@ export class UpdateProfileBasicUsecase {
 
     if (file) {
       this._fileValidator.validate(file);
-      const upload = await this._uploadService.uploadImage(
-        file,
-        userPayload.userId,
-      );
+      const upload = await this._uploadService.uploadImage(file, userId);
 
       profileDetails.imageUrl = upload.url;
     }
 
     if (name) {
-      updatedUser = await this._userRepo.update(userPayload.userId, {
+      updatedUser = await this._userRepo.update(userId, {
         name,
       });
 
@@ -61,7 +59,7 @@ export class UpdateProfileBasicUsecase {
 
     if (Object.keys(profileDetails).length > 0) {
       updatedProfile = await this._freelancerProfileRepo.update(
-        userPayload.userId,
+        userId,
         profileDetails,
       );
 
@@ -71,7 +69,6 @@ export class UpdateProfileBasicUsecase {
     }
 
     return {
-      message: PROFILE_UPDATED,
       freelancer: {
         user: {
           name: updatedUser ? updatedUser.name : name,
