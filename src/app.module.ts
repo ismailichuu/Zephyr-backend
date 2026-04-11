@@ -9,8 +9,16 @@ import { FreelancerModule } from './modules/freelancer/freelancer.module';
 import { ClientModule } from './modules/client/client.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { JobModule } from './modules/job/job.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 @Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
+  ],
   imports: [
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
